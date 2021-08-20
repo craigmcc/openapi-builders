@@ -1,0 +1,40 @@
+{
+  "name": "@craigmcc/openapi-builders",
+  "version": "1.0.0",
+  "description": "Builder Pattern generators to create OpenAPI Specification files.",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch --preserveWatchOutput",
+    "test": "mocha  src/**/*.test.ts",
+    "test:watch": "mocha --watch src/**/*.test.ts",
+    "tsc": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/craigmcc/openapi-builders.git"
+  },
+  "keywords": [
+    "openapi",
+    "open-api",
+    "typescript"
+  ],
+  "author": "craigmcc",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/craigmcc/openapi-builders/issues"
+  },
+  "homepage": "https://github.com/craigmcc/openapi-builders#readme",
+  "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^9.0.0",
+    "chai": "^4.3.4",
+    "mocha": "^9.0.3",
+    "ts-node": "^10.2.0",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "yaml": "^1.10.2"
+  }
+}
