@@ -25,7 +25,7 @@ allow expansion to future versions (if desired or needed).
 npm install @craigmcc/openapi-builders
 ```
 
-## Usage
+## Quick Start
 
 To start on building a very simple OpenAPI compatible description,
 do something like this in your Typescript-based application, most
@@ -33,8 +33,6 @@ likely in a separate function that is called when someone requests
 "http://myserver/openapi.json":
 
 ```typescript
-import {InfoObjectBuilder, OpenApiObjectBuilder} from "./Builders";
-
 // TODO - VALIDATE THIS!
 import "openapi-builders/3.0"; // Reference the OpenAPI version you want
 
