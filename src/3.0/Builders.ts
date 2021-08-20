@@ -63,8 +63,11 @@ export class OpenApiObjectBuilder {
         return this;
     }
 
-    public addPaths(paths: PathsObject): OpenApiObjectBuilder {
-        this.target.paths = paths;
+    public addPathItem(path: string, pathItem: PathItemObject): OpenApiObjectBuilder {
+        if (!this.target.paths) {
+            this.target.paths = {};
+        }
+        this.target.paths[path] = pathItem;
         return this;
     }
 
