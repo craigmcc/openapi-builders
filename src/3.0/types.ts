@@ -138,7 +138,7 @@ export interface LinkObject extends SpecificationExtension {
     server?: ServerObject;
 }
 
-// Information about HTTP links
+// Information about HTTP links, keyed by name
 // TODO: SkipBuilder NoTest
 export interface LinksObject {
     [name: string]: LinkObject | ReferenceObject;
@@ -183,7 +183,7 @@ export interface ParametersObject {
     [name: string]: ParameterObject | ReferenceObject;
 }
 
-// Information about an individual endpoint path
+// A specific endpoint path with associated operations
 // TODO: NoTest
 export interface PathItemObject extends SpecificationExtension {
     $ref?: string;
@@ -201,7 +201,7 @@ export interface PathItemObject extends SpecificationExtension {
     trace?: OperationObject;
 }
 
-// Information about available endpoint paths
+// Available endpoint paths, keyed by path
 // TODO: SkipBuilder NoTest
 export interface PathsObject extends SpecificationExtension {
     [path: string]: PathItemObject | ReferenceObject;

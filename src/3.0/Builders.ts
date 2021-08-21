@@ -25,8 +25,8 @@ import {
     OperationObject,
     ParameterInType,
     ParameterObject,
-    ParameterStyleType, PathItemObject,
-    PathsObject,
+    ParameterStyleType,
+    PathItemObject,
     ReferenceObject,
     RequestBodyObject,
     ResponseObject,
@@ -43,11 +43,11 @@ export const OPENAPI_VERSION = "3.0";
 
 export class OpenApiObjectBuilder {
 
-    constructor(info: InfoObject, paths?: PathsObject) {
+    constructor(info: InfoObject) {
         this.target = {
             openapi: OPENAPI_VERSION,
             info: info,
-            paths: paths ? paths : {},
+            paths: {},
         }
     }
 
@@ -64,8 +64,9 @@ export class OpenApiObjectBuilder {
     }
 
     public addPathItem(path: string, pathItem: PathItemObject): OpenApiObjectBuilder {
-        if (!this.target.paths) {
-            this.target.paths = {};
+        validatePath("ApiObjectBuilder.addPathItem", path);
+        if (this.target.paths[path]) {
+            throw new Error(`OpenApiObjectBuilder.addPathItem: path '${path}' cannot be specified more than once.`);
         }
         this.target.paths[path] = pathItem;
         return this;
@@ -105,6 +106,11 @@ export class OpenApiObjectBuilder {
     }
 
     public build(): OpenApiObject {
+/* Would be nice to check, but the spec allows none because of ACL constraints
+        if (this.target.paths && (Object.keys(this.target.paths).length === 0)) {
+            throw new Error("OpenApiBuilder.build:  At least one path must be specified.");
+        }
+*/
         // TODO - validation checks (if not already performed)
         return this.target;
     }
@@ -292,6 +298,7 @@ export class ContactObjectBuilder {
     }
 
     public addUrl(url: string): ContactObjectBuilder {
+        validateUrl("ContactObjectBuilder.addUrl", url);
         this.target.url = url;
         return this;
     }
@@ -306,6 +313,7 @@ export class ContactObjectBuilder {
 export class ExternalDocsObjectBuilder {
 
     constructor(url: string) {
+        validateUrl("ExternalDocsObjectBuilder", url);
         this.target = {
             url: url,
         };
@@ -328,6 +336,12 @@ export class ExternalDocsObjectBuilder {
 class HeaderObjectBuilder extends BaseParameterObjectBuilder {
 
     public build(): HeaderObject {
+        if (!this.target.in) {
+            throw new Error("HeaderObjectBuilder.build: Missing required 'in' value");
+        }
+        if (!this.target.name) {
+            throw new Error("HeaderObjectBuilder.build: Missing required 'name' value");
+        }
         // TODO - validation checks (if not already performed)
         return this.target as HeaderObject;
     }
@@ -399,6 +413,7 @@ export class LicenseObjectBuilder {
     private target: LicenseObject;
 
     public addUrl(url: string): LicenseObjectBuilder {
+        validateUrl("LicenseObjectBuilder.addUrl", url);
         this.target.url = url;
         return this;
     }
@@ -461,11 +476,14 @@ export class OperationObjectBuilder {
         return this;
     }
 
-    public addResponse(key: string, response: ResponseObject): OperationObjectBuilder {
+    public addResponse(statusCode: string, response: ResponseObject): OperationObjectBuilder {
         if (!this.target.responses) {
             this.target.responses = {};
         }
-        this.target.responses[key] = response;
+        if (this.target.responses.key) {
+            throw new Error(`OperationObjectBuilder.addResponse: Cannot specify statusCode '${statusCode}' more than once`);
+        }
+        this.target.responses[statusCode] = response;
         return this;
     }
 
@@ -525,11 +543,15 @@ class PathItemObjectBuilder {
     private target: PathItemObject;
 
     public add$Ref($ref: string): PathItemObjectBuilder {
+        validateRef("PathItemObjectBuilder.add$Ref", $ref);
         this.target.$ref = $ref;
         return this;
     }
 
     public addDelete(_delete: OperationObject): PathItemObjectBuilder {
+        if (this.target.delete) {
+            throw new Error(`PathItemObjectBuilder.addDelete: Cannot specify DELETE operation more than once per path.`);
+        }
         this.target.delete = _delete;
         return this;
     }
@@ -540,16 +562,25 @@ class PathItemObjectBuilder {
     }
 
     public addGet(_get: OperationObject): PathItemObjectBuilder {
+        if (this.target.get) {
+            throw new Error(`PathItemObjectBuilder.addGet: Cannot specify GET operation more than once per path.`);
+        }
         this.target.get = _get;
         return this;
     }
 
     public addHead(head: OperationObject): PathItemObjectBuilder {
+        if (this.target.head) {
+            throw new Error(`PathItemObjectBuilder.addHead: Cannot specify HEAD operation more than once per path.`);
+        }
         this.target.head = head;
         return this;
     }
 
     public addOptions(options: OperationObject): PathItemObjectBuilder {
+        if (this.target.options) {
+            throw new Error(`PathItemObjectBuilder.addOptions: Cannot specify OPTIONS operation more than once per path.`);
+        }
         this.target.options = options;
         return this;
     }
@@ -563,12 +594,26 @@ class PathItemObjectBuilder {
     }
 
     public addPatch(patch: OperationObject): PathItemObjectBuilder {
+        if (this.target.patch) {
+            throw new Error(`PathItemObjectBuilder.addPatch: Cannot specify PATCH operation more than once per path.`);
+        }
         this.target.patch = patch;
         return this;
     }
 
     public addPost(post: OperationObject): PathItemObjectBuilder {
+        if (this.target.post) {
+            throw new Error(`PathItemObjectBuilder.addPost: Cannot specify POST operation more than once per path.`);
+        }
         this.target.post = post;
+        return this;
+    }
+
+    public addPut(put: OperationObject): PathItemObjectBuilder {
+        if (this.target.put) {
+            throw new Error(`PathItemObjectBuilder.addPut: Cannot specify PUT operation more than once per path.`);
+        }
+        this.target.put = put;
         return this;
     }
 
@@ -587,6 +632,9 @@ class PathItemObjectBuilder {
     }
 
     public addTrace(trace: OperationObject): PathItemObjectBuilder {
+        if (this.target.trace) {
+            throw new Error(`PathItemObjectBuilder.addTrace: Cannot specify TRACE operation more than once per path.`);
+        }
         this.target.trace = trace;
         return this;
     }
@@ -601,6 +649,7 @@ class PathItemObjectBuilder {
 // Shorthand for creating references because they are very common
 export class Ref implements ReferenceObject {
     constructor($ref: string) {
+        validateRef("Ref", $ref)
         this.$ref = $ref;
     }
     $ref: string;
@@ -609,6 +658,7 @@ export class Ref implements ReferenceObject {
 export class ReferenceObjectBuilder {
 
     constructor($ref: string) {
+        validateRef("ReferenceObjectBuilder", $ref);
         this.target = {
             $ref: $ref,
         }
@@ -631,11 +681,12 @@ export class RequestBodyObjectBuilder {
 
     private target: RequestBodyObject;
 
-    public addContent(key: string, content: MediaTypeObject): RequestBodyObjectBuilder {
+    public addContent(mediaType: string, content: MediaTypeObject): RequestBodyObjectBuilder {
         if (!this.target.content) {
             this.target.content = {};
         }
-        this.target.content[key] = content;
+        validateMediaType("RequestBodyObjectBuilder.addContent", mediaType);
+        this.target.content[mediaType] = content;
         return this;
     }
 
@@ -672,19 +723,26 @@ export class ResponseObjectBuilder {
         return this;
     }
 
-    public addHeader(key: string, header: HeaderObject): ResponseObjectBuilder {
+    public addHeader(name: string, header: HeaderObject): ResponseObjectBuilder {
         if (!this.target.headers) {
             this.target.headers = {};
         }
-        this.target.headers[key] = header;
+        // TODO - case insensitive name dedup!
+        if (this.target.headers[name]) {
+            throw new Error(`ResponseObjectBuilder.addHeader: Cannot specify header name '${name}' more than once`);
+        }
+        this.target.headers[name] = header;
         return this;
     }
 
-    public addLink(key: string, link: LinkObject): ResponseObjectBuilder {
+    public addLink(name: string, link: LinkObject): ResponseObjectBuilder {
         if (!this.target.links) {
             this.target.links = {};
         }
-        this.target.links[key] = link;
+        if (this.target.links[name]) {
+            throw new Error(`ResponseObjectBuilder.addLink: Cannot specify link name '${name}' more than once`);
+        }
+        this.target.links[name] = link;
         return this;
     }
 
@@ -769,6 +827,7 @@ export class SecurityObjectBuilder {
 export class ServerObjectBuilder {
 
     constructor(url: string) {
+        validateUrl("ServerObjectBuilder", url);
         this.target = {
             url: url,
         };
@@ -817,3 +876,23 @@ export class TagObjectBuilder {
 
 }
 
+// Support Methods -----------------------------------------------------------
+
+const validateMediaType = (context: string, mediaType: string) => {
+    // TODO - syntax validation
+}
+
+const validatePath = (context: string, path: string) => {
+    // TODO - more complete syntax validation (template variabless OK)
+    if (!path.startsWith("/")) {
+        throw new Error(`${context}: Path '${path}' does not start with a slash`);
+    }
+}
+
+const validateRef = (context: string, ref: string) => {
+    // TODO - syntax validation
+}
+
+const validateUrl = (context: string, url: string) => {
+    // TODO - syntax validation (template variables OK)
+}
