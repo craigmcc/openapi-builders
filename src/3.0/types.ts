@@ -255,6 +255,7 @@ export interface SchemaObject extends SpecificationExtension {
     // TODO: uniqueItems, xml, writeOnly,
     deprecated?: boolean;
     description?: string;
+    example?: ExampleObject;
     externalDocs?: ExternalDocsObject;
     format?: FormatType;
     nullable?: boolean;

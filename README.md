@@ -25,45 +25,14 @@ allow expansion to future versions (if desired or needed).
 npm install @craigmcc/openapi-builders
 ```
 
-## Quick Start
+## Example
 
-To start on building a very simple OpenAPI compatible description,
-do something like this in your Typescript-based application, most
-likely in a separate function that is called when someone requests
-"http://myserver/openapi.json":
+A fleshed out example of using this module is the
+[openapi-builders-example](https://github.com/craigmcc/openapi-builders-example),
+where a variety of techniques are employed to document a fairly simple
+REST API for CRUD services against two different models (User and Post).
+See the README file for this module for more details.
 
-```typescript
-// TODO - VALIDATE THIS!
-import "openapi-builders/3.0"; // Reference the OpenAPI version you want
 
-let openAPI: string = "";
-
-export const generateOpenAPI = () => {
-    if (!openAPI) {
-        openAPI = new OpenApiObjectBuilder(
-            new InfoObjectBuilder("My Application", "1.0")
-                .addContact(new ContactObjectBuilder()
-                    .addEmail("myname@example.com")
-                    .addName("My Name")
-                    .build())
-                .addDescription("This is my cool application")
-                .build(),
-            .addPathItem("/users", new PathItemObjectBuilder(...).build()
-        ).asJson();
-    }
-    return openAPI;
-}
-```
-
-TODO - lots of refinement needed on this example!!!
-
-Although you can create nested changes of builder creation and build() calls,
-it is more likely that you will want to assemble parts of the overall structure
-in separate functions.  If you follow Builder Pattern principles, you can
-make all of these functions builders themselves, and assemble the results by
-calling your highest level detail builders.
-
-A comprehensive example of usage of this module can be found
-in the TODO project.
 
 

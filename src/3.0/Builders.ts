@@ -774,6 +774,11 @@ export class SchemaObjectBuilder {
         return this;
     }
 
+    public addExample(example: ExampleObject): SchemaObjectBuilder {
+        this.target.example = example;
+        return this;
+    }
+
     public addExternalDocs(externalDocs: ExternalDocsObject): SchemaObjectBuilder {
         this.target.externalDocs = externalDocs;
         return this;
