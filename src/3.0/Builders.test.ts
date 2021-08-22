@@ -279,7 +279,7 @@ const maximalLicenseObjectBuilder = (): LicenseObjectBuilder => {
         .addUrl(LICENSE_URL);
 }
 
-const OPEN_API_VERSION = "3.0";
+const OPEN_API_VERSION = "3.0.3";
 
 const maximalOpenApiObjectBuilder = (): OpenApiObjectBuilder => {
     return new OpenApiObjectBuilder(maximalInfoObjectBuilder().build())

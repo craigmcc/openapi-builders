@@ -12,24 +12,31 @@ import {
     BaseParameterObject,
     CallbackObject,
     ComponentsObject,
-    ContactObject, ContentsObject,
+    ContactObject,
+    ContentsObject,
     ExampleObject,
+    ExamplesObject,
     ExternalDocsObject,
     FormatType,
     HeaderObject,
+    HeadersObject,
     InfoObject,
     LicenseObject,
     LinkObject,
+    LinksObject,
     MediaTypeObject,
     OpenApiObject,
     OperationObject,
     ParameterInType,
     ParameterObject,
+    ParametersObject,
     ParameterStyleType,
     PathItemObject,
+    PathsObject,
     ReferenceObject,
     RequestBodyObject,
     ResponseObject,
+    ResponsesObject,
     SchemaObject,
     SecurityObject,
     ServerObject,
@@ -37,7 +44,9 @@ import {
     TypeType,
 } from "./types";
 
-export const OPENAPI_VERSION = "3.0";
+// This is the version of the specification that we were designed with,
+// but should be compatible with anything that requires 3.0 or 3.0.x.
+export const OPENAPI_VERSION = "3.0.3";
 
 // Overall Object Builder ----------------------------------------------------
 
@@ -69,6 +78,13 @@ export class OpenApiObjectBuilder {
             throw new Error(`OpenApiObjectBuilder.addPathItem: path '${path}' cannot be specified more than once.`);
         }
         this.target.paths[path] = pathItem;
+        return this;
+    }
+
+    public addPathItems(pathItems: PathsObject): OpenApiObjectBuilder {
+        for (const path in pathItems) {
+            this.addPathItem(path, pathItems[path]);
+        }
         return this;
     }
 
@@ -218,27 +234,48 @@ export class ComponentsObjectBuilder {
         return this;
     }
 
-    public addHeader(key: string, header: HeaderObject | ReferenceObject): ComponentsObjectBuilder {
+    public addHeader(name: string, header: HeaderObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.headers) {
             this.target.headers = {};
         }
-        this.target.headers[key] = header;
+        this.target.headers[name] = header;
         return this;
     }
 
-    public addLink(key: string, link: LinkObject | ReferenceObject): ComponentsObjectBuilder {
+    public addHeaders(headers: HeadersObject): ComponentsObjectBuilder {
+        for (const name in headers) {
+            this.addHeader(name, headers[name]);
+        }
+        return this;
+    }
+
+    public addLink(name: string, link: LinkObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.links) {
             this.target.links = {};
         }
-        this.target.links[key] = link;
+        this.target.links[name] = link;
         return this;
     }
 
-    public addParameter(key: string, parameter: ParameterObject | ReferenceObject): ComponentsObjectBuilder {
+    public addLinks(links: LinksObject): ComponentsObjectBuilder {
+        for (const name in links) {
+            this.addLink(name, links[name]);``
+        }
+        return this;
+    }
+
+    public addParameter(name: string, parameter: ParameterObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.parameters) {
             this.target.parameters = {};
         }
-        this.target.parameters[key] = parameter;
+        this.target.parameters[name] = parameter;
+        return this;
+    }
+
+    public addParameters(parameters: ParametersObject): ComponentsObjectBuilder {
+        for (const name in parameters) {
+            this.addParameter(name, parameters[name]);
+        }
         return this;
     }
 
@@ -250,14 +287,21 @@ export class ComponentsObjectBuilder {
         return this;
     }
 
-    public addResponse(key: string, response: ResponseObject | ReferenceObject): ComponentsObjectBuilder {
+    public addResponse(statusCode: string, response: ResponseObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.responses) {
             this.target.responses = {};
         }
-        if (key === "default") {
+        if (statusCode === "default") {
             this.target.responses.default = response;
         } else {
-            this.target.responses[key] = response;
+            this.target.responses[statusCode] = response;
+        }
+        return this;
+    }
+
+    public addResponses(responses: ResponsesObject): ComponentsObjectBuilder {
+        for (const statusCode in responses) {
+            this.addResponse(statusCode, responses[statusCode]);
         }
         return this;
     }
@@ -425,6 +469,38 @@ export class LicenseObjectBuilder {
 
 }
 
+export class MediaTypeObjectBuilder {
+
+    constructor() {
+        this.target = {};
+    }
+
+    private target: MediaTypeObject;
+
+    // TODO: addEncoding()
+
+    public addExample(example: ExampleObject): MediaTypeObjectBuilder {
+        this.target.example = example;
+        return this;
+    }
+
+    // TODO: addExamples()
+
+    public addSchema(schema: SchemaObject | ReferenceObject): MediaTypeObjectBuilder {
+        if (this.target.schema) {
+            throw new Error("MediaTypeObjectBuilder.addSchema: Cannot specify more than one schema");
+        }
+        this.target.schema = schema;
+        return this;
+    }
+
+    public build(): MediaTypeObject {
+        // TODO - validation checks (if not already performed)
+        return this.target;
+    }
+
+}
+
 export class OperationObjectBuilder {
 
     constructor() {
@@ -471,19 +547,34 @@ export class OperationObjectBuilder {
         return this;
     }
 
+    public addParameters(parameters: ParametersObject): OperationObjectBuilder {
+        for (const name in parameters) {
+            this.addParameter(parameters[name]);
+        }
+        return this;
+    }
+
     public addRequestBody(requestBody: RequestBodyObject | ReferenceObject): OperationObjectBuilder {
         this.target.requestBody = requestBody;
         return this;
     }
 
-    public addResponse(statusCode: string, response: ResponseObject): OperationObjectBuilder {
+    public addResponse(statusCode: string, response: ResponseObject | ReferenceObject): OperationObjectBuilder {
         if (!this.target.responses) {
             this.target.responses = {};
         }
-        if (this.target.responses.key) {
-            throw new Error(`OperationObjectBuilder.addResponse: Cannot specify statusCode '${statusCode}' more than once`);
+        if (statusCode === "default") {
+            this.target.responses.default = response;
+        } else {
+            this.target.responses[statusCode] = response;
         }
-        this.target.responses[statusCode] = response;
+        return this;
+    }
+
+    public addResponses(responses: ResponsesObject): OperationObjectBuilder {
+        for (const statusCode in responses) {
+            this.addResponse(statusCode, responses[statusCode]);
+        }
         return this;
     }
 
@@ -517,7 +608,7 @@ export class OperationObjectBuilder {
 
 }
 
-class ParameterObjectBuilder extends BaseParameterObjectBuilder {
+export class ParameterObjectBuilder extends BaseParameterObjectBuilder {
 
     constructor(inValue: ParameterInType, name: string) {
         super();
@@ -534,7 +625,7 @@ class ParameterObjectBuilder extends BaseParameterObjectBuilder {
 
 }
 
-class PathItemObjectBuilder {
+export class PathItemObjectBuilder {
 
     constructor() {
         this.target = {};
@@ -590,6 +681,13 @@ class PathItemObjectBuilder {
             this.target.parameters = [];
         }
         this.target.parameters.push(parameter);
+        return this;
+    }
+
+    public addParameters(parameters: ParametersObject): PathItemObjectBuilder {
+        for (const name in parameters) {
+            this.addParameter(parameters[name]);
+        }
         return this;
     }
 
@@ -715,6 +813,8 @@ export class ResponseObjectBuilder {
         }
     }
 
+    private target: ResponseObject;
+
     public addContent(key: string, content: MediaTypeObject): ResponseObjectBuilder {
         if (!this.target.content) {
             this.target.content = {};
@@ -723,7 +823,7 @@ export class ResponseObjectBuilder {
         return this;
     }
 
-    public addHeader(name: string, header: HeaderObject): ResponseObjectBuilder {
+    public addHeader(name: string, header: HeaderObject | ReferenceObject): ResponseObjectBuilder {
         if (!this.target.headers) {
             this.target.headers = {};
         }
@@ -735,7 +835,14 @@ export class ResponseObjectBuilder {
         return this;
     }
 
-    public addLink(name: string, link: LinkObject): ResponseObjectBuilder {
+    public addHeaders(headers: HeadersObject): ResponseObjectBuilder {
+        for (const name in headers) {
+            this.addHeader(name, headers[name]);
+        }
+        return this;
+    }
+
+    public addLink(name: string, link: LinkObject | ReferenceObject): ResponseObjectBuilder {
         if (!this.target.links) {
             this.target.links = {};
         }
@@ -746,7 +853,17 @@ export class ResponseObjectBuilder {
         return this;
     }
 
-    private target: ResponseObject;
+    public addLinks(links: LinksObject): ResponseObjectBuilder {
+        for (const name in links) {
+            this.addLink(name, links[name]);
+        }
+        return this;
+    }
+
+    public build(): ResponseObject {
+        // TODO - validation checks (if not already performed)
+        return this.target;
+    }
 
 }
 
@@ -786,6 +903,11 @@ export class SchemaObjectBuilder {
 
     public addFormat(format: FormatType): SchemaObjectBuilder {
         this.target.format = format;
+        return this;
+    }
+
+    public addItems(items: SchemaObject | ReferenceObject): SchemaObjectBuilder {
+        this.target.items = items;
         return this;
     }
 

@@ -145,7 +145,7 @@ export interface LinksObject {
 }
 
 // Characteristics of a media type
-// TODO: NoBuilder NoTest
+// TODO: PartialBuilder NoTest
 export interface MediaTypeObject extends SpecificationExtension {
     // encoding?: string; // TODO: Map???
     example?: any;
@@ -248,7 +248,7 @@ export interface ResponsesObject extends SpecificationExtension {
 export interface SchemaObject extends SpecificationExtension {
     // TODO: additionalProperties, allOf, anyOf, default,
     // TODO: discriminator, enum, example,
-    // TODO: exclusiveMaximum, exclusiveMinimum, items, maximum,
+    // TODO: exclusiveMaximum, exclusiveMinimum, maximum,
     // TODO: maxItems, maxLength, maxProperties, minimum, minItems,
     // TODO: minLength, minProperties, multipleOf, not, oneOf,
     // TODO: pattern, properties, readOnly, required, title,
@@ -258,6 +258,7 @@ export interface SchemaObject extends SpecificationExtension {
     example?: ExampleObject;
     externalDocs?: ExternalDocsObject;
     format?: FormatType;
+    items?: SchemaObject | ReferenceObject;
     nullable?: boolean;
     properties?: { [name: string]: SchemaObject | ReferenceObject };
     type?: TypeType;
