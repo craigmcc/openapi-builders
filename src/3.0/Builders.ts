@@ -38,6 +38,7 @@ import {
     ResponseObject,
     ResponsesObject,
     SchemaObject,
+    SchemasObject,
     SecurityObject,
     ServerObject,
     TagObject,
@@ -135,7 +136,7 @@ export class OpenApiObjectBuilder {
 
 // Detailed Object Builders --------------------------------------------------
 
-class BaseParameterObjectBuilder {
+export class BaseParameterObjectBuilder {
 
     constructor() {
         this.target = {};
@@ -195,6 +196,13 @@ class BaseParameterObjectBuilder {
 
     public addSchema(schema: SchemaObject | ReferenceObject): BaseParameterObjectBuilder {
         this.target.schema = schema;
+        return this;
+    }
+
+    public addSchemas(schemas: SchemasObject): BaseParameterObjectBuilder {
+        for (const name in schemas) {
+            this.addSchema(schemas[name]);
+        }
         return this;
     }
 
@@ -306,11 +314,18 @@ export class ComponentsObjectBuilder {
         return this;
     }
 
-    public addSchema(key: string, schema: SchemaObject | ReferenceObject): ComponentsObjectBuilder {
+    public addSchema(name: string, schema: SchemaObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.schemas) {
             this.target.schemas = {};
         }
-        this.target.schemas[key] = schema;
+        this.target.schemas[name] = schema;
+        return this;
+    }
+
+    public addSchemas(schemas: SchemasObject): ComponentsObjectBuilder {
+        for (const name in schemas) {
+            this.addSchema(name, schemas[name]);
+        }
         return this;
     }
 
