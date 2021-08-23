@@ -12,10 +12,10 @@ const expect = chai.expect;
 import {
     ComponentsObjectBuilder,
     ContactObjectBuilder,
-    ExternalDocsObjectBuilder,
+    ExternalDocsObjectBuilder, HeaderObjectBuilder,
     InfoObjectBuilder,
     LicenseObjectBuilder,
-    OpenApiObjectBuilder,
+    OpenApiObjectBuilder, ParameterObjectBuilder,
     ReferenceObjectBuilder,
     SchemaObjectBuilder,
     TagObjectBuilder,
@@ -134,6 +134,29 @@ describe("LicenseObjectBuilder", () => {
             .build();
         expect(result.name).equals(LICENSE_NAME);
         expect(result.url).to.be.undefined;
+    })
+
+})
+
+describe("ParameterObjectBuilder", () => {
+
+    // TODO - maximal test
+
+    it("should create a minimal ParameterObject", () => {
+        const result = new ParameterObjectBuilder("query", "customerId")
+            .build();
+        expect(result.allowEmptyValue).to.be.undefined;
+        expect(result.allowReserved).to.be.undefined;
+        expect(result.content).to.be.undefined;
+        expect(result.deprecated).to.be.undefined;
+        expect(result.example).to.be.undefined;
+        expect(result.examples).to.be.undefined;
+        expect(result.explode).to.be.undefined;
+        expect(result.in).to.equal("query");
+        expect(result.name).to.equal("customerId");
+        expect(result.required).to.be.undefined;
+        expect(result.schema).to.be.undefined;
+        expect(result.style).to.be.undefined;
     })
 
 })
@@ -291,6 +314,13 @@ const maximalOpenApiObjectBuilder = (): OpenApiObjectBuilder => {
         // tags
         .addTag(maximalTagObjectBuilder1().build())
         .addTag(maximalTagObjectBuilder2().build());
+}
+
+const maximalParameterObjectBuilder = (): ParameterObjectBuilder => {
+    return <ParameterObjectBuilder>new ParameterObjectBuilder("query", "customerId")
+        .addDescription("ID of the specified customer")
+        .addRequired(true);
+    // TODO - lots more
 }
 
 // Constructs a schema with a "User" model with "name" and "email" fields

@@ -19,23 +19,6 @@ export interface OpenApiObject extends SpecificationExtension {
 
 // Detailed Configuration Objects --------------------------------------------
 
-// Base description of parameter objects, specialized as needed
-export interface BaseParameterObject extends SpecificationExtension {
-    allowEmptyValue?: boolean;
-    allowReserved?: boolean;
-    content?: ContentsObject;
-    deprecated?: boolean;
-    description?: string;
-    example?: any;
-    examples?: ExamplesObject;
-    explode?: boolean;
-//    in?: ParameterInType;       // Required in some parameter definitions
-//    name? : string;             // Required in some parameter definitions
-    required?: boolean;
-    schema?: SchemaObject | ReferenceObject;
-    style?: ParameterStyleType;
-}
-
 // Single Callback instance
 // TODO: NoBuilder NoTest
 export interface CallbackObject extends SpecificationExtension {
@@ -98,7 +81,7 @@ export interface ExternalDocsObject extends SpecificationExtension {
 
 // Single HTTP Header
 // TODO: NoTest
-export interface HeaderObject extends BaseParameterObject {
+export interface HeaderObject extends ParametersObject {
     // "in" is disallowed
     // "name" is disallowed
 }
@@ -171,10 +154,21 @@ export interface OperationObject extends SpecificationExtension {
 }
 
 // Description of a general parameter, not otherwise specialized
-// TODO: NoTest
-export interface ParameterObject extends BaseParameterObject {
-    in: ParameterInType;
-    name: string;
+// TODO: PartialBuilder PartialTest
+export interface ParameterObject extends SpecificationExtension {
+    allowEmptyValue?: boolean;
+    allowReserved?: boolean;
+    content?: ContentsObject;
+    deprecated?: boolean;
+    description?: string;
+    example?: any;
+    examples?: ExamplesObject;
+    explode?: boolean;
+    in?: ParameterInType;       // Required in some parameter definitions
+    name? : string;             // Required in some parameter definitions
+    required?: boolean;
+    schema?: SchemaObject | ReferenceObject;
+    style?: ParameterStyleType;
 }
 
 // Information about multiple Parameters, keyed by parameter name

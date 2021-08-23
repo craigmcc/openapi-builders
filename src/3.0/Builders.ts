@@ -9,7 +9,6 @@ import * as yaml from "yaml";
 // Internal Modules ----------------------------------------------------------
 
 import {
-    BaseParameterObject,
     CallbackObject,
     ComponentsObject,
     ContactObject,
@@ -136,25 +135,32 @@ export class OpenApiObjectBuilder {
 
 // Detailed Object Builders --------------------------------------------------
 
-export class BaseParameterObjectBuilder {
+// Must be declared before use
+export class ParameterObjectBuilder {
 
-    constructor() {
+    constructor(inValue?: ParameterInType, name?: string) {
         this.target = {};
+        if (inValue) {
+            this.target.in = inValue;
+        }
+        if (name) {
+            this.target.name = name;
+        }
     }
 
-    protected target: BaseParameterObject;
+    protected target: ParameterObject;
 
-    public addAllowEmptyValue(allowEmptyValue: boolean): BaseParameterObjectBuilder {
+    public addAllowEmptyValue(allowEmptyValue: boolean): ParameterObjectBuilder {
         this.target.allowEmptyValue = allowEmptyValue;
         return this;
     }
 
-    public addAllowReserved(allowReserved: boolean): BaseParameterObjectBuilder {
+    public addAllowReserved(allowReserved: boolean): ParameterObjectBuilder {
         this.target.allowReserved = allowReserved;
         return this;
     }
 
-    public addContent(key: string, content: MediaTypeObject): BaseParameterObjectBuilder {
+    public addContent(key: string, content: MediaTypeObject): ParameterObjectBuilder {
         if (!this.target.content) {
             this.target.content = {};
         }
@@ -162,17 +168,17 @@ export class BaseParameterObjectBuilder {
         return this;
     }
 
-    public addDeprecated(deprecated: boolean): BaseParameterObjectBuilder {
+    public addDeprecated(deprecated: boolean): ParameterObjectBuilder {
         this.target.deprecated = deprecated;
         return this;
     }
 
-    public addDescription(description: string): BaseParameterObjectBuilder {
+    public addDescription(description: string): ParameterObjectBuilder {
         this.target.description = description;
         return this;
     }
 
-    public addExample(example: ExampleObject, key?: string): BaseParameterObjectBuilder {
+    public addExample(example: ExampleObject, key?: string): ParameterObjectBuilder {
         if (key) {
             if (!this.target.examples) {
                 this.target.examples = {};
@@ -184,36 +190,42 @@ export class BaseParameterObjectBuilder {
         return this;
     }
 
-    public addExplode(explode: boolean): BaseParameterObjectBuilder {
+    public addExplode(explode: boolean): ParameterObjectBuilder {
         this.target.explode = explode;
         return this;
     }
 
-    public addRequired(required: boolean): BaseParameterObjectBuilder {
+    public addRequired(required: boolean): ParameterObjectBuilder {
         this.target.required = required;
         return this;
     }
 
-    public addSchema(schema: SchemaObject | ReferenceObject): BaseParameterObjectBuilder {
+    public addSchema(schema: SchemaObject | ReferenceObject): ParameterObjectBuilder {
         this.target.schema = schema;
         return this;
     }
 
-    public addSchemas(schemas: SchemasObject): BaseParameterObjectBuilder {
+    public addSchemas(schemas: SchemasObject): ParameterObjectBuilder {
         for (const name in schemas) {
             this.addSchema(schemas[name]);
         }
         return this;
     }
 
-    public addStyle(style: ParameterStyleType): BaseParameterObjectBuilder {
+    public addStyle(style: ParameterStyleType): ParameterObjectBuilder {
         this.target.style = style;
         return this;
     }
 
-    public build(): BaseParameterObject {
+    public build(): ParameterObject {
         // TODO - validation checks (if not already performed)
-        return this.target;
+        if (!this.target.in) {
+            throw new Error("ParameterObjectBuilder.build: Missing required 'in' value");
+        }
+        if (!this.target.name) {
+            throw new Error("ParameterObjectBuilder.build: Missing required 'name' value");
+        }
+        return this.target as ParameterObject;
     }
 
 }
@@ -392,17 +404,16 @@ export class ExternalDocsObjectBuilder {
 
 }
 
-class HeaderObjectBuilder extends BaseParameterObjectBuilder {
+export class HeaderObjectBuilder extends ParameterObjectBuilder {
 
-    public build(): HeaderObject {
-        if (!this.target.in) {
-            throw new Error("HeaderObjectBuilder.build: Missing required 'in' value");
+    public build(): ParameterObject {
+        if (this.target.in) {
+            throw new Error("HeaderObjectBuilder.build: 'in' is not allowed on HeaderObject");
         }
-        if (!this.target.name) {
-            throw new Error("HeaderObjectBuilder.build: Missing required 'name' value");
+        if (this.target.name) {
+            throw new Error("HeaderObjectBuilder.build: 'name' is not allowed on HeaderObject")
         }
-        // TODO - validation checks (if not already performed)
-        return this.target as HeaderObject;
+        return this.target;
     }
 
 }
@@ -619,23 +630,6 @@ export class OperationObjectBuilder {
     public build(): OperationObject {
         // TODO - validation checks (if not already performed)
         return this.target;
-    }
-
-}
-
-export class ParameterObjectBuilder extends BaseParameterObjectBuilder {
-
-    constructor(inValue: ParameterInType, name: string) {
-        super();
-        this.target = {
-            in: inValue,
-            name: name,
-        };
-    }
-
-    public build(): ParameterObject {
-        // TODO - validation checks (if not already performed)
-        return this.target as ParameterObject;
     }
 
 }
