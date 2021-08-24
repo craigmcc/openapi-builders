@@ -10,6 +10,7 @@ import * as yaml from "yaml";
 
 import {
     CallbackObject,
+    CallbacksObject,
     ComponentsObject,
     ContactObject,
     ContentsObject,
@@ -33,6 +34,7 @@ import {
     PathItemObject,
     PathsObject,
     ReferenceObject,
+    RequestBodiesObject,
     RequestBodyObject,
     ResponseObject,
     ResponsesObject,
@@ -238,25 +240,41 @@ export class ComponentsObjectBuilder {
 
     private target: ComponentsObject;
 
-    public addCallback(key: string, callback: CallbackObject | ReferenceObject): ComponentsObjectBuilder {
+    public addCallback(name: string, callback: CallbackObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.callbacks) {
             this.target.callbacks = {};
         }
-        this.target.callbacks[key] = callback;
+        if (this.target.callbacks[name]) {
+            throw new Error(`ComponentsObjectBuilder.addCallback: Callback '${name}' has already been registered`);
+        }
+        this.target.callbacks[name] = callback;
         return this;
     }
 
-    public addExample(key: string, example: ExampleObject | ReferenceObject): ComponentsObjectBuilder {
+    public addCallbacks(callbacks: CallbacksObject): ComponentsObjectBuilder {
+        for (const name in callbacks) {
+            this.addCallback(name, callbacks[name]);
+        }
+        return this;
+    }
+
+    public addExample(name: string, example: ExampleObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.examples) {
             this.target.examples = {};
         }
-        this.target.examples[key] = example;
+        if (this.target.examples[name]) {
+            throw new Error(`ComponentsObjectBuilder.addExample: Example '${name}' has already been registered`);
+        }
+        this.target.examples[name] = example;
         return this;
     }
 
     public addHeader(name: string, header: HeaderObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.headers) {
             this.target.headers = {};
+        }
+        if (this.target.headers[name]) {
+            throw new Error(`ComponentsObjectBuilder.addHeader: Header '${name}' has already been registered`);
         }
         this.target.headers[name] = header;
         return this;
@@ -273,6 +291,9 @@ export class ComponentsObjectBuilder {
         if (!this.target.links) {
             this.target.links = {};
         }
+        if (this.target.links[name]) {
+            throw new Error(`ComponentsObjectBuilder.addLink: Link '${name}' has already been registered`);
+        }
         this.target.links[name] = link;
         return this;
     }
@@ -288,6 +309,9 @@ export class ComponentsObjectBuilder {
         if (!this.target.parameters) {
             this.target.parameters = {};
         }
+        if (this.target.parameters[name]) {
+            throw new Error(`ComponentsObjectBuilder.addParameter: Parameter '${name}' has already been registered`);
+        }
         this.target.parameters[name] = parameter;
         return this;
     }
@@ -299,11 +323,21 @@ export class ComponentsObjectBuilder {
         return this;
     }
 
-    public addRequestBody(key: string, requestBody: RequestBodyObject | ReferenceObject): ComponentsObjectBuilder {
+    public addRequestBodies(requestBodies: RequestBodiesObject): ComponentsObjectBuilder {
+        for (const name in requestBodies) {
+            this.addRequestBody(name, requestBodies[name]);
+        }
+        return this;
+    }
+
+    public addRequestBody(name: string, requestBody: RequestBodyObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.requestBodies) {
             this.target.requestBodies = {};
         }
-        this.target.requestBodies[key] = requestBody;
+        if (this.target.requestBodies[name]) {
+            throw new Error(`ComponentsObjectBuilder.addRequestBody: RequestBody '${name}' has already been registered`);
+        }
+        this.target.requestBodies[name] = requestBody;
         return this;
     }
 
@@ -314,6 +348,9 @@ export class ComponentsObjectBuilder {
         if (statusCode === "default") {
             this.target.responses.default = response;
         } else {
+            if (this.target.responses[statusCode]) {
+                throw new Error(`ComponentsObjectBuilder.addResponse: Response '${statusCode}' has already been registered`);
+            }
             this.target.responses[statusCode] = response;
         }
         return this;
@@ -329,6 +366,9 @@ export class ComponentsObjectBuilder {
     public addSchema(name: string, schema: SchemaObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.schemas) {
             this.target.schemas = {};
+        }
+        if (this.target.schemas[name]) {
+            throw new Error(`ComponentsObjectBuilder.addSchema: Schema '${name}' has already been registered`);
         }
         this.target.schemas[name] = schema;
         return this;

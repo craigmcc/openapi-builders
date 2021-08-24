@@ -20,13 +20,13 @@ export interface OpenApiObject extends SpecificationExtension {
 // Detailed Configuration Objects --------------------------------------------
 
 // Single Callback instance
-// TODO: NoBuilder NoTest
+// TODO: NoTest
 export interface CallbackObject extends SpecificationExtension {
     [name: string]: PathItemObject; // | any ???
 }
 
 // Set of Callbacks, keyed by ???
-// TODO: NoBuilder NoTest
+// TODO: NoTest
 export interface CallbacksObject extends SpecificationExtension {
     [name: string]: CallbackObject | ReferenceObject; // | any ???
 }
@@ -68,7 +68,7 @@ export interface ExampleObject extends SpecificationExtension {
 }
 
 // Set of examples, keyed by example name
-// TODO: SkipBuilder NoTest
+// TODO: NoTest
 export interface ExamplesObject {
     [name: string]: ExampleObject | ReferenceObject;
 }
@@ -87,7 +87,7 @@ export interface HeaderObject extends ParametersObject {
 }
 
 // Information about HTTP Headers, keyed by header name
-// TODO: SkipBuilder NoTest
+// TODO: NoTest
 export interface HeadersObject {
     [name: string]: HeaderObject | ReferenceObject;
 }
@@ -122,7 +122,7 @@ export interface LinkObject extends SpecificationExtension {
 }
 
 // Information about HTTP links, keyed by name
-// TODO: SkipBuilder NoTest
+// TODO: NoTest
 export interface LinksObject {
     [name: string]: LinkObject | ReferenceObject;
 }
@@ -172,7 +172,7 @@ export interface ParameterObject extends SpecificationExtension {
 }
 
 // Information about multiple Parameters, keyed by parameter name
-// TODO: SkipBuilder NoTest
+// TODO: NoTest
 export interface ParametersObject {
     [name: string]: ParameterObject | ReferenceObject;
 }
@@ -196,7 +196,7 @@ export interface PathItemObject extends SpecificationExtension {
 }
 
 // Available endpoint paths, keyed by path
-// TODO: SkipBuilder NoTest
+// TODO: NoTest
 export interface PathsObject extends SpecificationExtension {
     [path: string]: PathItemObject | ReferenceObject;
 }
@@ -207,7 +207,7 @@ export interface ReferenceObject { // NOTE: No SpecificationExtension here
 }
 
 // Describes a set of RequestBodyObjects, keyed by ???
-// TODO: SkipBuilder NoTest
+// TODO: NoTest
 export interface RequestBodiesObject {
     [name: string]: RequestBodyObject | ReferenceObject;
 }
