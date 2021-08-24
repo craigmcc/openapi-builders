@@ -12,18 +12,18 @@ const expect = chai.expect;
 import {
     ComponentsObjectBuilder,
     ContactObjectBuilder,
-    ExternalDocsObjectBuilder, HeaderObjectBuilder,
+    ExternalDocsObjectBuilder,
+    HeaderObjectBuilder,
     InfoObjectBuilder,
     LicenseObjectBuilder,
-    OpenApiObjectBuilder, ParameterObjectBuilder,
+    OpenApiObjectBuilder,
+    ParameterObjectBuilder,
     ReferenceObjectBuilder,
     SchemaObjectBuilder,
     TagObjectBuilder,
 } from "./Builders";
 
 // Test Suites ---------------------------------------------------------------
-
-// TODO: CallbackObjectBuilder
 
 describe("ComponentsObjectBuilder", () => {
 
@@ -120,6 +120,7 @@ describe("InfoObjectBuilder", () => {
     })
 
 })
+
 describe("LicenseObjectBuilder", () => {
 
     it("should create a maximal LicenseObject", () => {
@@ -191,7 +192,6 @@ describe("OpenApiObjectBuilder", () => {
         const builder = new OpenApiObjectBuilder(
             minimalInfoObjectBuilder().build(),
         );
-//        console.log(builder.asJson());
         const result = builder.build();
 
         expect(result.openapi).equals(OPEN_API_VERSION);
@@ -286,7 +286,7 @@ const maximalInfoObjectBuilder = (): InfoObjectBuilder => {
         .addContact(maximalContactObjectBuilder().build())
         .addDescription(INFO_DESCRIPTION)
         .addLicense(maximalLicenseObjectBuilder().build())
-        // .addServer stuff
+        // TODO .addServer stuff
         .addTermsOfService(INFO_TERMS_OF_SERVICE);
 }
 
