@@ -229,8 +229,8 @@ describe("TagObjectBuilder", () => {
 
     it("should create a maximal TagObject", () => {
         const result = new TagObjectBuilder(TAG2_NAME)
-            .addDescription(TAG2_DESCRIPTION)
-            .addExternalDocs(maximalExternalDocsObjectBuilder().build())
+            .description(TAG2_DESCRIPTION)
+            .externalDocs(maximalExternalDocsObjectBuilder().build())
             .build();
         expect(result.description).to.equal(TAG2_DESCRIPTION);
         expect(result.externalDocs).to.deep.equal(maximalExternalDocsObjectBuilder().build());
@@ -250,11 +250,11 @@ describe("TagObjectBuilder", () => {
 // Support Functions ---------------------------------------------------------
 
 const maximalComponentsObjectBuilder = (): ComponentsObjectBuilder => {
-    // TODO - addCallback, addExample, addHeader, addLink, addParameter
-    // TODO - addRequestBody, addResponse
+    // TODO - callback, example, header, link, parameter
+    // TODO - requestBody, response
     return new ComponentsObjectBuilder()
-        .addSchema(SCHEMA_USER_KEY, maximalSchemaObjectBuilder1().build())
-        .addSchema(SCHEMA_CUSTOMER_KEY, maximalSchemaObjectBuilder2().build());
+        .schema(SCHEMA_USER_KEY, maximalSchemaObjectBuilder1().build())
+        .schema(SCHEMA_CUSTOMER_KEY, maximalSchemaObjectBuilder2().build());
 }
 
 const CONTACT_EMAIL = "fred@bedrock.com";
@@ -263,9 +263,9 @@ const CONTACT_URL = "https://bedrock.com/fred";
 
 const maximalContactObjectBuilder = (): ContactObjectBuilder => {
     return new ContactObjectBuilder()
-        .addEmail(CONTACT_EMAIL)
-        .addName(CONTACT_NAME)
-        .addUrl(CONTACT_URL);
+        .email(CONTACT_EMAIL)
+        .name(CONTACT_NAME)
+        .url(CONTACT_URL);
 }
 
 const EXTERNAL_DOCS_DESCRIPTION = "Biography of Fred Flintstone";
@@ -273,7 +273,7 @@ const EXTERNAL_DOCS_URL = "https://bedrock.com/fred.md";
 
 const maximalExternalDocsObjectBuilder = (): ExternalDocsObjectBuilder => {
     return new ExternalDocsObjectBuilder(EXTERNAL_DOCS_URL)
-        .addDescription(EXTERNAL_DOCS_DESCRIPTION);
+        .description(EXTERNAL_DOCS_DESCRIPTION);
 }
 
 const INFO_DESCRIPTION = "Information Description";
@@ -283,11 +283,11 @@ const INFO_VERSION = "1.0.0";
 
 const maximalInfoObjectBuilder = (): InfoObjectBuilder => {
     return new InfoObjectBuilder(INFO_TITLE, INFO_VERSION)
-        .addContact(maximalContactObjectBuilder().build())
-        .addDescription(INFO_DESCRIPTION)
-        .addLicense(maximalLicenseObjectBuilder().build())
-        // TODO .addServer stuff
-        .addTermsOfService(INFO_TERMS_OF_SERVICE);
+        .contact(maximalContactObjectBuilder().build())
+        .description(INFO_DESCRIPTION)
+        .license(maximalLicenseObjectBuilder().build())
+        // TODO server stuff
+        .termsOfService(INFO_TERMS_OF_SERVICE);
 }
 
 const minimalInfoObjectBuilder = (): InfoObjectBuilder => {
@@ -299,27 +299,27 @@ const LICENSE_URL = "https://www.apache.org/licenses/LICENSE-2.0";
 
 const maximalLicenseObjectBuilder = (): LicenseObjectBuilder => {
     return new LicenseObjectBuilder(LICENSE_NAME)
-        .addUrl(LICENSE_URL);
+        .url(LICENSE_URL);
 }
 
 const OPEN_API_VERSION = "3.0.3";
 
 const maximalOpenApiObjectBuilder = (): OpenApiObjectBuilder => {
     return new OpenApiObjectBuilder(maximalInfoObjectBuilder().build())
-        .addComponents(maximalComponentsObjectBuilder().build())
-        .addExternalDocs(maximalExternalDocsObjectBuilder().build())
+        .components(maximalComponentsObjectBuilder().build())
+        .externalDocs(maximalExternalDocsObjectBuilder().build())
         // paths
         // security
         // servers
         // tags
-        .addTag(maximalTagObjectBuilder1().build())
-        .addTag(maximalTagObjectBuilder2().build());
+        .tag(maximalTagObjectBuilder1().build())
+        .tag(maximalTagObjectBuilder2().build());
 }
 
 const maximalParameterObjectBuilder = (): ParameterObjectBuilder => {
     return <ParameterObjectBuilder>new ParameterObjectBuilder("query", "customerId")
-        .addDescription("ID of the specified customer")
-        .addRequired(true);
+        .description("ID of the specified customer")
+        .required(true);
     // TODO - lots more
 }
 
@@ -331,12 +331,12 @@ const SCHEMA_USER_KEY = "User";
 
 const maximalSchemaObjectBuilder1 = (): SchemaObjectBuilder => {
     return new SchemaObjectBuilder("object", `${SCHEMA_USER_KEY} Model`)
-        .addExternalDocs(maximalExternalDocsObjectBuilder().build())
-        .addProperty(SCHEMA_NAME_KEY, new SchemaObjectBuilder("string", `${SCHEMA_NAME_KEY} Field`)
-            .addNullable(false)
+        .externalDocs(maximalExternalDocsObjectBuilder().build())
+        .property(SCHEMA_NAME_KEY, new SchemaObjectBuilder("string", `${SCHEMA_NAME_KEY} Field`)
+            .nullable(false)
             .build())
-        .addProperty(SCHEMA_EMAIL_KEY, new SchemaObjectBuilder("string", `${SCHEMA_EMAIL_KEY} Field`)
-            .addNullable(true)
+        .property(SCHEMA_EMAIL_KEY, new SchemaObjectBuilder("string", `${SCHEMA_EMAIL_KEY} Field`)
+            .nullable(true)
             .build());
 }
 
@@ -351,13 +351,13 @@ const TAG2_NAME = "Second Tag";
 
 const maximalTagObjectBuilder1 = (): TagObjectBuilder => {
     return new TagObjectBuilder(TAG1_NAME)
-        .addDescription(TAG1_DESCRIPTION)
-        .addExternalDocs(maximalExternalDocsObjectBuilder().build());
+        .description(TAG1_DESCRIPTION)
+        .externalDocs(maximalExternalDocsObjectBuilder().build());
 }
 
 const maximalTagObjectBuilder2 = (): TagObjectBuilder => {
     return new TagObjectBuilder(TAG2_NAME)
-        .addDescription(TAG2_DESCRIPTION)
-        .addExternalDocs(maximalExternalDocsObjectBuilder().build());
+        .description(TAG2_DESCRIPTION)
+        .externalDocs(maximalExternalDocsObjectBuilder().build());
 }
 

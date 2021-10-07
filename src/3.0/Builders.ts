@@ -64,38 +64,38 @@ export class OpenApiObjectBuilder {
 
     private target: OpenApiObject;
 
-    public addComponents(components: ComponentsObject): OpenApiObjectBuilder {
+    public components(components: ComponentsObject): OpenApiObjectBuilder {
         this.target.components = components;
         return this;
     }
 
-    public addExternalDocs(externalDocs: ExternalDocsObject): OpenApiObjectBuilder {
+    public externalDocs(externalDocs: ExternalDocsObject): OpenApiObjectBuilder {
         this.target.externalDocs = externalDocs;
         return this;
     }
 
-    public addPathItem(path: string, pathItem: PathItemObject): OpenApiObjectBuilder {
-        validatePath("ApiObjectBuilder.addPathItem", path);
+    public pathItem(path: string, pathItem: PathItemObject): OpenApiObjectBuilder {
+        validatePath("ApiObjectBuilder.pathItem", path);
         if (this.target.paths[path]) {
-            throw new Error(`OpenApiObjectBuilder.addPathItem: path '${path}' cannot be specified more than once.`);
+            throw new Error(`OpenApiObjectBuilder.pathItem: path '${path}' cannot be specified more than once.`);
         }
         this.target.paths[path] = pathItem;
         return this;
     }
 
-    public addPathItems(pathItems: PathsObject): OpenApiObjectBuilder {
+    public pathItems(pathItems: PathsObject): OpenApiObjectBuilder {
         for (const path in pathItems) {
-            this.addPathItem(path, pathItems[path]);
+            this.pathItem(path, pathItems[path]);
         }
         return this;
     }
 
-    public addSecurity(security: SecurityObject): OpenApiObjectBuilder {
+    public security(security: SecurityObject): OpenApiObjectBuilder {
         this.target.security = security;
         return this;
     }
 
-    public addServer(server: ServerObject): OpenApiObjectBuilder {
+    public server(server: ServerObject): OpenApiObjectBuilder {
         if (!this.target.servers) {
             this.target.servers = [];
         }
@@ -103,7 +103,7 @@ export class OpenApiObjectBuilder {
         return this;
     }
 
-    public addTag(tag: TagObject): OpenApiObjectBuilder {
+    public tag(tag: TagObject): OpenApiObjectBuilder {
         if (!this.target.tags) {
             this.target.tags = [];
         }
@@ -152,17 +152,17 @@ export class ParameterObjectBuilder {
 
     protected target: ParameterObject;
 
-    public addAllowEmptyValue(allowEmptyValue: boolean): ParameterObjectBuilder {
+    public allowEmptyValue(allowEmptyValue: boolean): ParameterObjectBuilder {
         this.target.allowEmptyValue = allowEmptyValue;
         return this;
     }
 
-    public addAllowReserved(allowReserved: boolean): ParameterObjectBuilder {
+    public allowReserved(allowReserved: boolean): ParameterObjectBuilder {
         this.target.allowReserved = allowReserved;
         return this;
     }
 
-    public addContent(key: string, content: MediaTypeObject): ParameterObjectBuilder {
+    public content(key: string, content: MediaTypeObject): ParameterObjectBuilder {
         if (!this.target.content) {
             this.target.content = {};
         }
@@ -170,17 +170,17 @@ export class ParameterObjectBuilder {
         return this;
     }
 
-    public addDeprecated(deprecated: boolean): ParameterObjectBuilder {
+    public deprecated(deprecated: boolean): ParameterObjectBuilder {
         this.target.deprecated = deprecated;
         return this;
     }
 
-    public addDescription(description: string): ParameterObjectBuilder {
+    public description(description: string): ParameterObjectBuilder {
         this.target.description = description;
         return this;
     }
 
-    public addExample(example: ExampleObject, key?: string): ParameterObjectBuilder {
+    public example(example: ExampleObject, key?: string): ParameterObjectBuilder {
         if (key) {
             if (!this.target.examples) {
                 this.target.examples = {};
@@ -192,29 +192,29 @@ export class ParameterObjectBuilder {
         return this;
     }
 
-    public addExplode(explode: boolean): ParameterObjectBuilder {
+    public explode(explode: boolean): ParameterObjectBuilder {
         this.target.explode = explode;
         return this;
     }
 
-    public addRequired(required: boolean): ParameterObjectBuilder {
+    public required(required: boolean): ParameterObjectBuilder {
         this.target.required = required;
         return this;
     }
 
-    public addSchema(schema: SchemaObject | ReferenceObject): ParameterObjectBuilder {
+    public schema(schema: SchemaObject | ReferenceObject): ParameterObjectBuilder {
         this.target.schema = schema;
         return this;
     }
 
-    public addSchemas(schemas: SchemasObject): ParameterObjectBuilder {
+    public schemas(schemas: SchemasObject): ParameterObjectBuilder {
         for (const name in schemas) {
-            this.addSchema(schemas[name]);
+            this.schema(schemas[name]);
         }
         return this;
     }
 
-    public addStyle(style: ParameterStyleType): ParameterObjectBuilder {
+    public style(style: ParameterStyleType): ParameterObjectBuilder {
         this.target.style = style;
         return this;
     }
@@ -240,108 +240,108 @@ export class ComponentsObjectBuilder {
 
     private target: ComponentsObject;
 
-    public addCallback(name: string, callback: CallbackObject | ReferenceObject): ComponentsObjectBuilder {
+    public callback(name: string, callback: CallbackObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.callbacks) {
             this.target.callbacks = {};
         }
         if (this.target.callbacks[name]) {
-            throw new Error(`ComponentsObjectBuilder.addCallback: Callback '${name}' has already been registered`);
+            throw new Error(`ComponentsObjectBuilder.callback: Callback '${name}' has already been registered`);
         }
         this.target.callbacks[name] = callback;
         return this;
     }
 
-    public addCallbacks(callbacks: CallbacksObject): ComponentsObjectBuilder {
+    public callbacks(callbacks: CallbacksObject): ComponentsObjectBuilder {
         for (const name in callbacks) {
-            this.addCallback(name, callbacks[name]);
+            this.callback(name, callbacks[name]);
         }
         return this;
     }
 
-    public addExample(name: string, example: ExampleObject | ReferenceObject): ComponentsObjectBuilder {
+    public example(name: string, example: ExampleObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.examples) {
             this.target.examples = {};
         }
         if (this.target.examples[name]) {
-            throw new Error(`ComponentsObjectBuilder.addExample: Example '${name}' has already been registered`);
+            throw new Error(`ComponentsObjectBuilder.example: Example '${name}' has already been registered`);
         }
         this.target.examples[name] = example;
         return this;
     }
 
-    public addHeader(name: string, header: HeaderObject | ReferenceObject): ComponentsObjectBuilder {
+    public header(name: string, header: HeaderObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.headers) {
             this.target.headers = {};
         }
         if (this.target.headers[name]) {
-            throw new Error(`ComponentsObjectBuilder.addHeader: Header '${name}' has already been registered`);
+            throw new Error(`ComponentsObjectBuilder.header: Header '${name}' has already been registered`);
         }
         this.target.headers[name] = header;
         return this;
     }
 
-    public addHeaders(headers: HeadersObject): ComponentsObjectBuilder {
+    public headers(headers: HeadersObject): ComponentsObjectBuilder {
         for (const name in headers) {
-            this.addHeader(name, headers[name]);
+            this.header(name, headers[name]);
         }
         return this;
     }
 
-    public addLink(name: string, link: LinkObject | ReferenceObject): ComponentsObjectBuilder {
+    public link(name: string, link: LinkObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.links) {
             this.target.links = {};
         }
         if (this.target.links[name]) {
-            throw new Error(`ComponentsObjectBuilder.addLink: Link '${name}' has already been registered`);
+            throw new Error(`ComponentsObjectBuilder.link: Link '${name}' has already been registered`);
         }
         this.target.links[name] = link;
         return this;
     }
 
-    public addLinks(links: LinksObject): ComponentsObjectBuilder {
+    public links(links: LinksObject): ComponentsObjectBuilder {
         for (const name in links) {
-            this.addLink(name, links[name]);``
+            this.link(name, links[name]);``
         }
         return this;
     }
 
-    public addParameter(name: string, parameter: ParameterObject | ReferenceObject): ComponentsObjectBuilder {
+    public parameter(name: string, parameter: ParameterObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.parameters) {
             this.target.parameters = {};
         }
         if (this.target.parameters[name]) {
-            throw new Error(`ComponentsObjectBuilder.addParameter: Parameter '${name}' has already been registered`);
+            throw new Error(`ComponentsObjectBuilder.parameter: Parameter '${name}' has already been registered`);
         }
         this.target.parameters[name] = parameter;
         return this;
     }
 
-    public addParameters(parameters: ParametersObject): ComponentsObjectBuilder {
+    public parameters(parameters: ParametersObject): ComponentsObjectBuilder {
         for (const name in parameters) {
-            this.addParameter(name, parameters[name]);
+            this.parameter(name, parameters[name]);
         }
         return this;
     }
 
-    public addRequestBodies(requestBodies: RequestBodiesObject): ComponentsObjectBuilder {
+    public requestBodies(requestBodies: RequestBodiesObject): ComponentsObjectBuilder {
         for (const name in requestBodies) {
-            this.addRequestBody(name, requestBodies[name]);
+            this.requestBody(name, requestBodies[name]);
         }
         return this;
     }
 
-    public addRequestBody(name: string, requestBody: RequestBodyObject | ReferenceObject): ComponentsObjectBuilder {
+    public requestBody(name: string, requestBody: RequestBodyObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.requestBodies) {
             this.target.requestBodies = {};
         }
         if (this.target.requestBodies[name]) {
-            throw new Error(`ComponentsObjectBuilder.addRequestBody: RequestBody '${name}' has already been registered`);
+            throw new Error(`ComponentsObjectBuilder.requestBody: RequestBody '${name}' has already been registered`);
         }
         this.target.requestBodies[name] = requestBody;
         return this;
     }
 
-    public addResponse(statusCode: string, response: ResponseObject | ReferenceObject): ComponentsObjectBuilder {
+    public response(statusCode: string, response: ResponseObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.responses) {
             this.target.responses = {};
         }
@@ -349,39 +349,39 @@ export class ComponentsObjectBuilder {
             this.target.responses.default = response;
         } else {
             if (this.target.responses[statusCode]) {
-                throw new Error(`ComponentsObjectBuilder.addResponse: Response '${statusCode}' has already been registered`);
+                throw new Error(`ComponentsObjectBuilder.response: Response '${statusCode}' has already been registered`);
             }
             this.target.responses[statusCode] = response;
         }
         return this;
     }
 
-    public addResponses(responses: ResponsesObject): ComponentsObjectBuilder {
+    public responses(responses: ResponsesObject): ComponentsObjectBuilder {
         for (const statusCode in responses) {
-            this.addResponse(statusCode, responses[statusCode]);
+            this.response(statusCode, responses[statusCode]);
         }
         return this;
     }
 
-    public addSchema(name: string, schema: SchemaObject | ReferenceObject): ComponentsObjectBuilder {
+    public schema(name: string, schema: SchemaObject | ReferenceObject): ComponentsObjectBuilder {
         if (!this.target.schemas) {
             this.target.schemas = {};
         }
         if (this.target.schemas[name]) {
-            throw new Error(`ComponentsObjectBuilder.addSchema: Schema '${name}' has already been registered`);
+            throw new Error(`ComponentsObjectBuilder.schema: Schema '${name}' has already been registered`);
         }
         this.target.schemas[name] = schema;
         return this;
     }
 
-    public addSchemas(schemas: SchemasObject): ComponentsObjectBuilder {
+    public schemas(schemas: SchemasObject): ComponentsObjectBuilder {
         for (const name in schemas) {
-            this.addSchema(name, schemas[name]);
+            this.schema(name, schemas[name]);
         }
         return this;
     }
 
-    // TODO: addSecurityScheme
+    // TODO: securityScheme
 
     public build(): ComponentsObject {
         // TODO - validation checks (if not already performed)
@@ -398,18 +398,18 @@ export class ContactObjectBuilder {
 
     private target: ContactObject;
 
-    public addEmail(email: string): ContactObjectBuilder {
+    public email(email: string): ContactObjectBuilder {
         this.target.email = email;
         return this;
     }
 
-    public addName(name: string): ContactObjectBuilder {
+    public name(name: string): ContactObjectBuilder {
         this.target.name = name;
         return this;
     }
 
-    public addUrl(url: string): ContactObjectBuilder {
-        validateUrl("ContactObjectBuilder.addUrl", url);
+    public url(url: string): ContactObjectBuilder {
+        validateUrl("ContactObjectBuilder.url", url);
         this.target.url = url;
         return this;
     }
@@ -432,7 +432,7 @@ export class ExternalDocsObjectBuilder {
 
     private target: ExternalDocsObject;
 
-    public addDescription (description: string): ExternalDocsObjectBuilder {
+    public description (description: string): ExternalDocsObjectBuilder {
         this.target.description = description;
         return this;
     }
@@ -469,22 +469,22 @@ export class InfoObjectBuilder {
 
     private target: InfoObject;
 
-    public addContact(contact: ContactObject): InfoObjectBuilder {
+    public contact(contact: ContactObject): InfoObjectBuilder {
         this.target.contact = contact;
         return this;
     }
 
-    public addDescription(description: string): InfoObjectBuilder {
+    public description(description: string): InfoObjectBuilder {
         this.target.description = description;
         return this;
     }
 
-    public addLicense(license: LicenseObject): InfoObjectBuilder {
+    public license(license: LicenseObject): InfoObjectBuilder {
         this.target.license = license;
         return this;
     }
 
-    public addServer(server: ServerObject): InfoObjectBuilder {
+    public server(server: ServerObject): InfoObjectBuilder {
         if (!this.target.servers) {
             this.target.servers = [];
         }
@@ -492,7 +492,7 @@ export class InfoObjectBuilder {
         return this;
     }
 
-    public addTag(tag: TagObject): InfoObjectBuilder {
+    public tag(tag: TagObject): InfoObjectBuilder {
         if (!this.target.tags) {
             this.target.tags = [];
         }
@@ -500,7 +500,7 @@ export class InfoObjectBuilder {
         return this;
     }
 
-    public addTermsOfService(termsOfService: string): InfoObjectBuilder {
+    public termsOfService(termsOfService: string): InfoObjectBuilder {
         this.target.termsOfService = termsOfService;
         return this;
     }
@@ -522,8 +522,8 @@ export class LicenseObjectBuilder {
 
     private target: LicenseObject;
 
-    public addUrl(url: string): LicenseObjectBuilder {
-        validateUrl("LicenseObjectBuilder.addUrl", url);
+    public url(url: string): LicenseObjectBuilder {
+        validateUrl("LicenseObjectBuilder.url", url);
         this.target.url = url;
         return this;
     }
@@ -545,16 +545,16 @@ export class MediaTypeObjectBuilder {
 
     // TODO: addEncoding()
 
-    public addExample(example: ExampleObject): MediaTypeObjectBuilder {
+    public example(example: ExampleObject): MediaTypeObjectBuilder {
         this.target.example = example;
         return this;
     }
 
-    // TODO: addExamples()
+    // TODO: examples()
 
-    public addSchema(schema: SchemaObject | ReferenceObject): MediaTypeObjectBuilder {
+    public schema(schema: SchemaObject | ReferenceObject): MediaTypeObjectBuilder {
         if (this.target.schema) {
-            throw new Error("MediaTypeObjectBuilder.addSchema: Cannot specify more than one schema");
+            throw new Error("MediaTypeObjectBuilder.schema: Cannot specify more than one schema");
         }
         this.target.schema = schema;
         return this;
@@ -577,7 +577,7 @@ export class OperationObjectBuilder {
 
     private target: OperationObject;
 
-    public addCallback(key: string, callback: CallbackObject): OperationObjectBuilder {
+    public callback(key: string, callback: CallbackObject): OperationObjectBuilder {
         if (!this.target.callbacks) {
             this.target.callbacks = {};
         }
@@ -585,27 +585,27 @@ export class OperationObjectBuilder {
         return this;
     }
 
-    public addDeprecated(deprecated: boolean): OperationObjectBuilder {
+    public deprecated(deprecated: boolean): OperationObjectBuilder {
         this.target.deprecated = deprecated;
         return this;
     }
 
-    public addDescription(description: string): OperationObjectBuilder {
+    public description(description: string): OperationObjectBuilder {
         this.target.description = description;
         return this;
     }
 
-    public addExternalDocs(externalDocs: ExternalDocsObject): OperationObjectBuilder {
+    public externalDocs(externalDocs: ExternalDocsObject): OperationObjectBuilder {
         this.target.externalDocs = externalDocs;
         return this;
     }
 
-    public addOperationId(operationId: string): OperationObjectBuilder {
+    public operationId(operationId: string): OperationObjectBuilder {
         this.target.operationId = operationId;
         return this;
     }
 
-    public addParameter(parameter: ParameterObject | ReferenceObject): OperationObjectBuilder {
+    public parameter(parameter: ParameterObject | ReferenceObject): OperationObjectBuilder {
         if (!this.target.parameters) {
             this.target.parameters = [];
         }
@@ -613,19 +613,19 @@ export class OperationObjectBuilder {
         return this;
     }
 
-    public addParameters(parameters: ParametersObject): OperationObjectBuilder {
+    public parameters(parameters: ParametersObject): OperationObjectBuilder {
         for (const name in parameters) {
-            this.addParameter(parameters[name]);
+            this.parameter(parameters[name]);
         }
         return this;
     }
 
-    public addRequestBody(requestBody: RequestBodyObject | ReferenceObject): OperationObjectBuilder {
+    public requestBody(requestBody: RequestBodyObject | ReferenceObject): OperationObjectBuilder {
         this.target.requestBody = requestBody;
         return this;
     }
 
-    public addResponse(statusCode: string, response: ResponseObject | ReferenceObject): OperationObjectBuilder {
+    public response(statusCode: string, response: ResponseObject | ReferenceObject): OperationObjectBuilder {
         if (!this.target.responses) {
             this.target.responses = {};
         }
@@ -637,14 +637,14 @@ export class OperationObjectBuilder {
         return this;
     }
 
-    public addResponses(responses: ResponsesObject): OperationObjectBuilder {
+    public responses(responses: ResponsesObject): OperationObjectBuilder {
         for (const statusCode in responses) {
-            this.addResponse(statusCode, responses[statusCode]);
+            this.response(statusCode, responses[statusCode]);
         }
         return this;
     }
 
-    public addServer(server: ServerObject | ReferenceObject): OperationObjectBuilder {
+    public server(server: ServerObject | ReferenceObject): OperationObjectBuilder {
         if (!this.target.servers) {
             this.target.servers = [];
         }
@@ -652,14 +652,14 @@ export class OperationObjectBuilder {
         return this;
     }
 
-    // TODO: addSecurity()
+    // TODO: security()
 
-    public addSummary(summary: string): OperationObjectBuilder {
+    public summary(summary: string): OperationObjectBuilder {
         this.target.summary = summary;
         return this;
     }
 
-    public addTag(tag: string): OperationObjectBuilder {
+    public tag(tag: string): OperationObjectBuilder {
         if (!this.target.tags) {
             this.target.tags = [];
         }
@@ -682,50 +682,50 @@ export class PathItemObjectBuilder {
 
     private target: PathItemObject;
 
-    public add$Ref($ref: string): PathItemObjectBuilder {
-        validateRef("PathItemObjectBuilder.add$Ref", $ref);
+    public $ref($ref: string): PathItemObjectBuilder {
+        validateRef("PathItemObjectBuilder.$ref", $ref);
         this.target.$ref = $ref;
         return this;
     }
 
-    public addDelete(_delete: OperationObject): PathItemObjectBuilder {
+    public delete(_delete: OperationObject): PathItemObjectBuilder {
         if (this.target.delete) {
-            throw new Error(`PathItemObjectBuilder.addDelete: Cannot specify DELETE operation more than once per path.`);
+            throw new Error(`PathItemObjectBuilder.delete: Cannot specify DELETE operation more than once per path.`);
         }
         this.target.delete = _delete;
         return this;
     }
 
-    public addDescription(description: string): PathItemObjectBuilder {
+    public description(description: string): PathItemObjectBuilder {
         this.target.description = description;
         return this;
     }
 
-    public addGet(_get: OperationObject): PathItemObjectBuilder {
+    public get(_get: OperationObject): PathItemObjectBuilder {
         if (this.target.get) {
-            throw new Error(`PathItemObjectBuilder.addGet: Cannot specify GET operation more than once per path.`);
+            throw new Error(`PathItemObjectBuilder.get: Cannot specify GET operation more than once per path.`);
         }
         this.target.get = _get;
         return this;
     }
 
-    public addHead(head: OperationObject): PathItemObjectBuilder {
+    public head(head: OperationObject): PathItemObjectBuilder {
         if (this.target.head) {
-            throw new Error(`PathItemObjectBuilder.addHead: Cannot specify HEAD operation more than once per path.`);
+            throw new Error(`PathItemObjectBuilder.head: Cannot specify HEAD operation more than once per path.`);
         }
         this.target.head = head;
         return this;
     }
 
-    public addOptions(options: OperationObject): PathItemObjectBuilder {
+    public options(options: OperationObject): PathItemObjectBuilder {
         if (this.target.options) {
-            throw new Error(`PathItemObjectBuilder.addOptions: Cannot specify OPTIONS operation more than once per path.`);
+            throw new Error(`PathItemObjectBuilder.options: Cannot specify OPTIONS operation more than once per path.`);
         }
         this.target.options = options;
         return this;
     }
 
-    public addParameter(parameter: ParameterObject | ReferenceObject): PathItemObjectBuilder {
+    public parameter(parameter: ParameterObject | ReferenceObject): PathItemObjectBuilder {
         if (!this.target.parameters) {
             this.target.parameters = [];
         }
@@ -733,38 +733,38 @@ export class PathItemObjectBuilder {
         return this;
     }
 
-    public addParameters(parameters: ParametersObject): PathItemObjectBuilder {
+    public parameters(parameters: ParametersObject): PathItemObjectBuilder {
         for (const name in parameters) {
-            this.addParameter(parameters[name]);
+            this.parameter(parameters[name]);
         }
         return this;
     }
 
-    public addPatch(patch: OperationObject): PathItemObjectBuilder {
+    public patch(patch: OperationObject): PathItemObjectBuilder {
         if (this.target.patch) {
-            throw new Error(`PathItemObjectBuilder.addPatch: Cannot specify PATCH operation more than once per path.`);
+            throw new Error(`PathItemObjectBuilder.patch: Cannot specify PATCH operation more than once per path.`);
         }
         this.target.patch = patch;
         return this;
     }
 
-    public addPost(post: OperationObject): PathItemObjectBuilder {
+    public post(post: OperationObject): PathItemObjectBuilder {
         if (this.target.post) {
-            throw new Error(`PathItemObjectBuilder.addPost: Cannot specify POST operation more than once per path.`);
+            throw new Error(`PathItemObjectBuilder.post: Cannot specify POST operation more than once per path.`);
         }
         this.target.post = post;
         return this;
     }
 
-    public addPut(put: OperationObject): PathItemObjectBuilder {
+    public put(put: OperationObject): PathItemObjectBuilder {
         if (this.target.put) {
-            throw new Error(`PathItemObjectBuilder.addPut: Cannot specify PUT operation more than once per path.`);
+            throw new Error(`PathItemObjectBuilder.put: Cannot specify PUT operation more than once per path.`);
         }
         this.target.put = put;
         return this;
     }
 
-    public addServer(server: ServerObject): PathItemObjectBuilder {
+    public server(server: ServerObject): PathItemObjectBuilder {
         if (!this.target.server) {
             this.target.servers = [];
         }
@@ -773,14 +773,14 @@ export class PathItemObjectBuilder {
         return this;
     }
 
-    public addSummary(summary: string): PathItemObjectBuilder {
+    public summary(summary: string): PathItemObjectBuilder {
         this.target.summary = summary;
         return this;
     }
 
-    public addTrace(trace: OperationObject): PathItemObjectBuilder {
+    public trace(trace: OperationObject): PathItemObjectBuilder {
         if (this.target.trace) {
-            throw new Error(`PathItemObjectBuilder.addTrace: Cannot specify TRACE operation more than once per path.`);
+            throw new Error(`PathItemObjectBuilder.trace: Cannot specify TRACE operation more than once per path.`);
         }
         this.target.trace = trace;
         return this;
@@ -828,21 +828,21 @@ export class RequestBodyObjectBuilder {
 
     private target: RequestBodyObject;
 
-    public addContent(mediaType: string, content: MediaTypeObject): RequestBodyObjectBuilder {
+    public content(mediaType: string, content: MediaTypeObject): RequestBodyObjectBuilder {
         if (!this.target.content) {
             this.target.content = {};
         }
-        validateMediaType("RequestBodyObjectBuilder.addContent", mediaType);
+        validateMediaType("RequestBodyObjectBuilder.content", mediaType);
         this.target.content[mediaType] = content;
         return this;
     }
 
-    public addDescription(description: string): RequestBodyObjectBuilder {
+    public description(description: string): RequestBodyObjectBuilder {
         this.target.description = description;
         return this;
     }
 
-    public addRequired(required: boolean): RequestBodyObjectBuilder {
+    public required(required: boolean): RequestBodyObjectBuilder {
         this.target.required = required;
         return this;
     }
@@ -864,7 +864,7 @@ export class ResponseObjectBuilder {
 
     private target: ResponseObject;
 
-    public addContent(key: string, content: MediaTypeObject): ResponseObjectBuilder {
+    public content(key: string, content: MediaTypeObject): ResponseObjectBuilder {
         if (!this.target.content) {
             this.target.content = {};
         }
@@ -872,39 +872,39 @@ export class ResponseObjectBuilder {
         return this;
     }
 
-    public addHeader(name: string, header: HeaderObject | ReferenceObject): ResponseObjectBuilder {
+    public header(name: string, header: HeaderObject | ReferenceObject): ResponseObjectBuilder {
         if (!this.target.headers) {
             this.target.headers = {};
         }
         // TODO - case insensitive name dedup!
         if (this.target.headers[name]) {
-            throw new Error(`ResponseObjectBuilder.addHeader: Cannot specify header name '${name}' more than once`);
+            throw new Error(`ResponseObjectBuilder.header: Cannot specify header name '${name}' more than once`);
         }
         this.target.headers[name] = header;
         return this;
     }
 
-    public addHeaders(headers: HeadersObject): ResponseObjectBuilder {
+    public headers(headers: HeadersObject): ResponseObjectBuilder {
         for (const name in headers) {
-            this.addHeader(name, headers[name]);
+            this.header(name, headers[name]);
         }
         return this;
     }
 
-    public addLink(name: string, link: LinkObject | ReferenceObject): ResponseObjectBuilder {
+    public link(name: string, link: LinkObject | ReferenceObject): ResponseObjectBuilder {
         if (!this.target.links) {
             this.target.links = {};
         }
         if (this.target.links[name]) {
-            throw new Error(`ResponseObjectBuilder.addLink: Cannot specify link name '${name}' more than once`);
+            throw new Error(`ResponseObjectBuilder.link: Cannot specify link name '${name}' more than once`);
         }
         this.target.links[name] = link;
         return this;
     }
 
-    public addLinks(links: LinksObject): ResponseObjectBuilder {
+    public links(links: LinksObject): ResponseObjectBuilder {
         for (const name in links) {
-            this.addLink(name, links[name]);
+            this.link(name, links[name]);
         }
         return this;
     }
@@ -930,42 +930,42 @@ export class SchemaObjectBuilder {
 
     private target: SchemaObject;
 
-    public addDeprecated(deprecated: boolean): SchemaObjectBuilder {
+    public deprecated(deprecated: boolean): SchemaObjectBuilder {
         this.target.deprecated = deprecated;
         return this;
     }
 
-    public addDescription(description: string): SchemaObjectBuilder {
+    public description(description: string): SchemaObjectBuilder {
         this.target.description = description;
         return this;
     }
 
-    public addExample(example: ExampleObject): SchemaObjectBuilder {
+    public example(example: ExampleObject): SchemaObjectBuilder {
         this.target.example = example;
         return this;
     }
 
-    public addExternalDocs(externalDocs: ExternalDocsObject): SchemaObjectBuilder {
+    public externalDocs(externalDocs: ExternalDocsObject): SchemaObjectBuilder {
         this.target.externalDocs = externalDocs;
         return this;
     }
 
-    public addFormat(format: FormatType): SchemaObjectBuilder {
+    public format(format: FormatType): SchemaObjectBuilder {
         this.target.format = format;
         return this;
     }
 
-    public addItems(items: SchemaObject | ReferenceObject): SchemaObjectBuilder {
+    public items(items: SchemaObject | ReferenceObject): SchemaObjectBuilder {
         this.target.items = items;
         return this;
     }
 
-    public addNullable(nullable: boolean): SchemaObjectBuilder {
+    public nullable(nullable: boolean): SchemaObjectBuilder {
         this.target.nullable = nullable;
         return this;
     }
 
-    public addProperty(name: string, property: SchemaObject | ReferenceObject): SchemaObjectBuilder {
+    public property(name: string, property: SchemaObject | ReferenceObject): SchemaObjectBuilder {
         if (!this.target.properties) {
             this.target.properties = {};
         }
@@ -973,7 +973,7 @@ export class SchemaObjectBuilder {
         return this;
     }
 
-    public addType(type: TypeType): SchemaObjectBuilder {
+    public type(type: TypeType): SchemaObjectBuilder {
         this.target.type = type;
         return this;
     }
@@ -1011,12 +1011,12 @@ export class ServerObjectBuilder {
 
     private target: ServerObject;
 
-    public addDescription(description: string): ServerObjectBuilder {
+    public description(description: string): ServerObjectBuilder {
         this.target.description = description;
         return this;
     }
 
-    // TODO: addVariable()
+    // TODO: variable()
 
     public build(): ServerObject {
         // TODO - validation checks (if not already performed)
@@ -1035,12 +1035,12 @@ export class TagObjectBuilder {
 
     private target: TagObject;
 
-    public addDescription(description: string): TagObjectBuilder {
+    public description(description: string): TagObjectBuilder {
         this.target.description = description;
         return this;
     }
 
-    public addExternalDocs(externalDocs: ExternalDocsObject): TagObjectBuilder {
+    public externalDocs(externalDocs: ExternalDocsObject): TagObjectBuilder {
         this.target.externalDocs = externalDocs;
         return this;
     }
