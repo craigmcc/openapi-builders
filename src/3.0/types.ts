@@ -230,7 +230,7 @@ export interface ResponseObject extends SpecificationExtension {
 }
 
 // Describes a set of possible responses, keyed by HTTP status code
-// TODO: SkipBuilder NoTest
+// TODO: NoTest
 export interface ResponsesObject extends SpecificationExtension {
     // @ts-ignore
     default?: ResponseObject | ReferenceObject;
@@ -259,7 +259,7 @@ export interface SchemaObject extends SpecificationExtension {
 }
 
 // Information about Schemas, keyed by schema name
-// TODO: SkipBuilder NoTest
+// TODO: NoTest
 export interface SchemasObject {
     [name: string]: SchemaObject | ReferenceObject;
 }

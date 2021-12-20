@@ -674,6 +674,26 @@ export class OperationObjectBuilder {
 
 }
 
+export class ParametersObjectBuilder {
+
+    constructor() {
+        this.target = {}
+    }
+
+    private target: ParametersObject = {};
+
+    public parameter(name: string, parameter: ParameterObject | ReferenceObject) {
+        this.target[name] = parameter;
+        return this;
+    }
+
+    public build(): ParametersObject {
+        // TODO - validation checks (if not already performed)
+        return this.target;
+    }
+
+}
+
 export class PathItemObjectBuilder {
 
     constructor() {
@@ -820,6 +840,26 @@ export class ReferenceObjectBuilder {
 
 }
 
+export class RequestBodiesObjectBuilder {
+
+    constructor() {
+        this.target = {}
+    }
+
+    private target: RequestBodiesObject = {};
+
+    public requestBody(name: string, requestBody: RequestBodyObject | ReferenceObject) {
+        this.target[name] = requestBody;
+        return this;
+    }
+
+    public build(): RequestBodiesObject {
+        // TODO - validation checks (if not already performed)
+        return this.target;
+    }
+
+}
+
 export class RequestBodyObjectBuilder {
 
     constructor() {
@@ -916,6 +956,28 @@ export class ResponseObjectBuilder {
 
 }
 
+export class ResponsesObjectBuilder {
+
+    constructor() {
+        this.target = {}
+    }
+
+    private target: ResponsesObject = {};
+
+    public response(statusCode: string, response: ReferenceObject | ResponseObject, isDefault: boolean = false) {
+        this.target[statusCode] = response;
+        if (isDefault) {
+            this.target.default = response;
+        }
+    }
+
+    public build(): ResponsesObject {
+        // TODO - validation checks (if not already performed)
+        return this.target;
+    }
+
+}
+
 export class SchemaObjectBuilder {
 
     constructor(type?: TypeType, description?: string, nullable?: boolean) {
@@ -979,6 +1041,26 @@ export class SchemaObjectBuilder {
     }
 
     public build(): SchemaObject {
+        // TODO - validation checks (if not already performed)
+        return this.target;
+    }
+
+}
+
+export class SchemasObjectBuilder {
+
+    constructor() {
+        this.target = {}
+    }
+
+    private target: SchemasObject = {};
+
+    public schema(name: string, schema: SchemaObject | ReferenceObject) {
+        this.target[name] = schema;
+        return this;
+    }
+
+    public build(): SchemasObject {
         // TODO - validation checks (if not already performed)
         return this.target;
     }
