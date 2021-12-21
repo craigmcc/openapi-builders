@@ -43,6 +43,7 @@ import {
     SecurityObject,
     ServerObject,
     TagObject,
+    TagsObject,
     TypeType,
 } from "./types";
 
@@ -90,6 +91,12 @@ export class OpenApiObjectBuilder {
         return this;
     }
 
+    // Alias for pathItems
+    public paths(paths: PathsObject): OpenApiObjectBuilder {
+        return this.pathItems(paths);
+
+    }
+
     public security(security: SecurityObject): OpenApiObjectBuilder {
         this.target.security = security;
         return this;
@@ -109,6 +116,14 @@ export class OpenApiObjectBuilder {
         }
         this.target.tags.push(tag);
         return this;
+    }
+
+    public tags(tags: TagsObject): OpenApiObjectBuilder {
+        for (const tag in tags) {
+            this.tag(tags[tag]);
+        }
+        return this;
+
     }
 
     public asJson(): string {
@@ -807,6 +822,26 @@ export class PathItemObjectBuilder {
     }
 
     public build(): PathItemObject {
+        // TODO - validation checks (if not already performed)
+        return this.target;
+    }
+
+}
+
+export class PathsObjectBuilder {
+
+    constructor() {
+        this.target = {}
+    }
+
+    private target: PathsObject = {};
+
+    public path(path: string, pathItem: PathItemObject | ReferenceObject) {
+        this.target[path] = pathItem;
+        return this;
+    }
+
+    public build(): PathsObject {
         // TODO - validation checks (if not already performed)
         return this.target;
     }

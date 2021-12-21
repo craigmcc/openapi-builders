@@ -291,6 +291,12 @@ export interface TagObject extends SpecificationExtension {
     name: string;
 }
 
+// Available tag descriptions, keyed by tag name
+// TODO: NoTest
+export interface TagsObject extends SpecificationExtension {
+    [tag: string]: TagObject;
+}
+
 // Primitive Types -----------------------------------------------------------
 
 // Data formats for a SchemaObject
