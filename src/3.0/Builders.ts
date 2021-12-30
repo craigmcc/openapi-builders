@@ -999,11 +999,12 @@ export class ResponsesObjectBuilder {
 
     private target: ResponsesObject = {};
 
-    public response(statusCode: string, response: ReferenceObject | ResponseObject, isDefault: boolean = false) {
+    public response(statusCode: string, response: ReferenceObject | ResponseObject, isDefault: boolean = false): ResponsesObjectBuilder {
         this.target[statusCode] = response;
         if (isDefault) {
             this.target.default = response;
         }
+        return this;
     }
 
     public build(): ResponsesObject {
