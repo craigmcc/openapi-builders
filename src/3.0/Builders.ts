@@ -313,7 +313,7 @@ export class ComponentsObjectBuilder {
 
     public links(links: LinksObject): ComponentsObjectBuilder {
         for (const name in links) {
-            this.link(name, links[name]);``
+            this.link(name, links[name]);
         }
         return this;
     }

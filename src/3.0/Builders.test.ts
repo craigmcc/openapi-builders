@@ -13,7 +13,6 @@ import {
     ComponentsObjectBuilder,
     ContactObjectBuilder,
     ExternalDocsObjectBuilder,
-    HeaderObjectBuilder,
     InfoObjectBuilder,
     LicenseObjectBuilder,
     OpenApiObjectBuilder,
@@ -168,7 +167,6 @@ describe("OpenApiObjectBuilder", () => {
 
         const result = maximalOpenApiObjectBuilder()
             .build();
-//        console.log(JSON.stringify(result, null, 2));
 
         expect(result.openapi).equals(OPEN_API_VERSION);
         expect(result.components).to.deep.equal(maximalComponentsObjectBuilder().build());
@@ -317,7 +315,7 @@ const maximalOpenApiObjectBuilder = (): OpenApiObjectBuilder => {
 }
 
 const maximalParameterObjectBuilder = (): ParameterObjectBuilder => {
-    return <ParameterObjectBuilder>new ParameterObjectBuilder("query", "customerId")
+    return new ParameterObjectBuilder("query", "customerId")
         .description("ID of the specified customer")
         .required(true);
     // NOTE - lots more
