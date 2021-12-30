@@ -30,13 +30,13 @@ describe("ComponentsObjectBuilder", () => {
     it("should create a maximal ComponentsObject", () => {
         const result = maximalComponentsObjectBuilder()
             .build();
-        // TODO: callbacks
-        // TODO: examples
-        // TODO: headers
-        // TODO: links
-        // TODO: parameters
-        // TODO: requestBodies
-        // TODO: responses
+        // NOTE - callbacks
+        // NOTE - examples
+        // NOTE - headers
+        // NOTE - links
+        // NOTE - parameters
+        // NOTE - requestBodies
+        // NOTE - responses
         expect(result.schemas).to.exist;
         // @ts-ignore
         expect(result.schemas[SCHEMA_CUSTOMER_KEY]).to.exist;
@@ -46,7 +46,7 @@ describe("ComponentsObjectBuilder", () => {
         expect(result.schemas[SCHEMA_USER_KEY]).to.exist;
         // @ts-ignore
         expect(result.schemas[SCHEMA_USER_KEY]).to.deep.equal(maximalSchemaObjectBuilder1().build());
-        // TODO: securitySchemes
+        // NOTE - securitySchemes
     })
 
     it("should create a minimal ComponentsObject", () => {
@@ -101,7 +101,7 @@ describe("InfoObjectBuilder", () => {
         expect(result.contact).to.deep.equal(maximalContactObjectBuilder().build());
         expect(result.description).equals(INFO_DESCRIPTION);
         expect(result.license).to.deep.equal(maximalLicenseObjectBuilder().build());
-        // TODO - servers
+        // NOTE - servers
         expect(result.termsOfService).equals(INFO_TERMS_OF_SERVICE);
         expect(result.title).equals(INFO_TITLE);
         expect(result.version).equals(INFO_VERSION);
@@ -141,7 +141,7 @@ describe("LicenseObjectBuilder", () => {
 
 describe("ParameterObjectBuilder", () => {
 
-    // TODO - maximal test
+    // NOTE - maximal test
 
     it("should create a minimal ParameterObject", () => {
         const result = new ParameterObjectBuilder("query", "customerId")
@@ -174,9 +174,9 @@ describe("OpenApiObjectBuilder", () => {
         expect(result.components).to.deep.equal(maximalComponentsObjectBuilder().build());
         expect(result.externalDocs).to.deep.equal(maximalExternalDocsObjectBuilder().build());
         expect(result.info).to.deep.equal(maximalInfoObjectBuilder().build());
-        // TODO: paths
-        // TODO: security
-        // TODO: servers
+        // NOTE - paths
+        // NOTE - security
+        // NOTE - servers
         expect(result.tags).to.exist;
         // @ts-ignore
         expect(result.tags.length).to.equal(2);
@@ -250,8 +250,8 @@ describe("TagObjectBuilder", () => {
 // Support Functions ---------------------------------------------------------
 
 const maximalComponentsObjectBuilder = (): ComponentsObjectBuilder => {
-    // TODO - callback, example, header, link, parameter
-    // TODO - requestBody, response
+    // NOTE - callback, example, header, link, parameter
+    // NOTE - requestBody, response
     return new ComponentsObjectBuilder()
         .schema(SCHEMA_USER_KEY, maximalSchemaObjectBuilder1().build())
         .schema(SCHEMA_CUSTOMER_KEY, maximalSchemaObjectBuilder2().build());
@@ -286,7 +286,7 @@ const maximalInfoObjectBuilder = (): InfoObjectBuilder => {
         .contact(maximalContactObjectBuilder().build())
         .description(INFO_DESCRIPTION)
         .license(maximalLicenseObjectBuilder().build())
-        // TODO server stuff
+        // NOTE - server stuff
         .termsOfService(INFO_TERMS_OF_SERVICE);
 }
 
@@ -320,7 +320,7 @@ const maximalParameterObjectBuilder = (): ParameterObjectBuilder => {
     return <ParameterObjectBuilder>new ParameterObjectBuilder("query", "customerId")
         .description("ID of the specified customer")
         .required(true);
-    // TODO - lots more
+    // NOTE - lots more
 }
 
 // Constructs a schema with a "User" model with "name" and "email" fields

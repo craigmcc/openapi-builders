@@ -102,7 +102,7 @@ export abstract class AbstractApplication {
      *
      * The default implementation iterates through the response()
      * and responses() methods for each defined model.
-     * // TODO - responses for HTTP errors
+     * // NOTE - manually add responses for HTTP errors
      */
     public responses(): ResponsesObjectBuilder {
         const builder = new ResponsesObjectBuilder();
@@ -133,7 +133,7 @@ export abstract class AbstractApplication {
      * Generate a TagsObjectBuilder containing tag descriptions for this
      * application.
      *
-     * // TODO - Add TagsObjectBuilder and switch when available
+     * // NOTE - Add TagsObjectBuilder and switch when available
      *
      * The default implementation returns an empty builder.
      */

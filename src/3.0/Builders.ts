@@ -13,9 +13,7 @@ import {
     CallbacksObject,
     ComponentsObject,
     ContactObject,
-    ContentsObject,
     ExampleObject,
-    ExamplesObject,
     ExternalDocsObject,
     FormatType,
     HeaderObject,
@@ -144,7 +142,7 @@ export class OpenApiObjectBuilder {
             throw new Error("OpenApiBuilder.build:  At least one path must be specified.");
         }
 */
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -235,7 +233,7 @@ export class ParameterObjectBuilder {
     }
 
     public build(): ParameterObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         if (!this.target.in) {
             throw new Error("ParameterObjectBuilder.build: Missing required 'in' value");
         }
@@ -396,10 +394,10 @@ export class ComponentsObjectBuilder {
         return this;
     }
 
-    // TODO: securityScheme
+    // NOTE - securityScheme
 
     public build(): ComponentsObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -430,7 +428,7 @@ export class ContactObjectBuilder {
     }
 
     public build(): ContactObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -453,7 +451,7 @@ export class ExternalDocsObjectBuilder {
     }
 
     public build(): ExternalDocsObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -521,7 +519,7 @@ export class InfoObjectBuilder {
     }
 
     public build(): InfoObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -544,7 +542,7 @@ export class LicenseObjectBuilder {
     }
 
     public build(): LicenseObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -558,14 +556,14 @@ export class MediaTypeObjectBuilder {
 
     private target: MediaTypeObject;
 
-    // TODO: addEncoding()
+    // NOTE - addEncoding()
 
     public example(example: ExampleObject): MediaTypeObjectBuilder {
         this.target.example = example;
         return this;
     }
 
-    // TODO: examples()
+    // NOTE - examples()
 
     public schema(schema: SchemaObject | ReferenceObject): MediaTypeObjectBuilder {
         if (this.target.schema) {
@@ -576,7 +574,7 @@ export class MediaTypeObjectBuilder {
     }
 
     public build(): MediaTypeObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -667,7 +665,7 @@ export class OperationObjectBuilder {
         return this;
     }
 
-    // TODO: security()
+    // NOTE - security()
 
     public summary(summary: string): OperationObjectBuilder {
         this.target.summary = summary;
@@ -683,7 +681,7 @@ export class OperationObjectBuilder {
     }
 
     public build(): OperationObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -703,7 +701,7 @@ export class ParametersObjectBuilder {
     }
 
     public build(): ParametersObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -822,7 +820,7 @@ export class PathItemObjectBuilder {
     }
 
     public build(): PathItemObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -842,7 +840,7 @@ export class PathsObjectBuilder {
     }
 
     public build(): PathsObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -869,7 +867,7 @@ export class ReferenceObjectBuilder {
     private target: ReferenceObject;
 
     public build(): ReferenceObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -889,7 +887,7 @@ export class RequestBodiesObjectBuilder {
     }
 
     public build(): RequestBodiesObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -923,7 +921,7 @@ export class RequestBodyObjectBuilder {
     }
 
     public build(): RequestBodyObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -951,7 +949,7 @@ export class ResponseObjectBuilder {
         if (!this.target.headers) {
             this.target.headers = {};
         }
-        // TODO - case insensitive name dedup!
+        // NOTE - case insensitive name dedup!
         if (this.target.headers[name]) {
             throw new Error(`ResponseObjectBuilder.header: Cannot specify header name '${name}' more than once`);
         }
@@ -985,7 +983,7 @@ export class ResponseObjectBuilder {
     }
 
     public build(): ResponseObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -1008,7 +1006,7 @@ export class ResponsesObjectBuilder {
     }
 
     public build(): ResponsesObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -1077,7 +1075,7 @@ export class SchemaObjectBuilder {
     }
 
     public build(): SchemaObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -1097,7 +1095,7 @@ export class SchemasObjectBuilder {
     }
 
     public build(): SchemasObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -1112,7 +1110,7 @@ export class SecurityObjectBuilder {
     private target: SecurityObject;
 
     public build(): SecurityObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -1134,10 +1132,10 @@ export class ServerObjectBuilder {
         return this;
     }
 
-    // TODO: variable()
+    // NOTE - variable()
 
     public build(): ServerObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -1164,7 +1162,7 @@ export class TagObjectBuilder {
     }
 
     public build(): TagObject {
-        // TODO - validation checks (if not already performed)
+        // NOTE - validation checks (if not already performed)
         return this.target;
     }
 
@@ -1173,20 +1171,20 @@ export class TagObjectBuilder {
 // Support Methods -----------------------------------------------------------
 
 const validateMediaType = (context: string, mediaType: string) => {
-    // TODO - syntax validation
+    // NOTE - syntax validation
 }
 
 const validatePath = (context: string, path: string) => {
-    // TODO - more complete syntax validation (template variabless OK)
+    // NOTE - more complete syntax validation (template variabless OK)
     if (!path.startsWith("/")) {
         throw new Error(`${context}: Path '${path}' does not start with a slash`);
     }
 }
 
 const validateRef = (context: string, ref: string) => {
-    // TODO - syntax validation
+    // NOTE - syntax validation
 }
 
 const validateUrl = (context: string, url: string) => {
-    // TODO - syntax validation (template variables OK)
+    // NOTE - syntax validation (template variables OK)
 }

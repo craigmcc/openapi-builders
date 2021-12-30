@@ -5,7 +5,7 @@
 // Overall Configuration Object ----------------------------------------------
 
 // OpenApiObject - Overall Open API Specification configuration
-// TODO: PartialTest
+// NOTE - PartialTest
 export interface OpenApiObject extends SpecificationExtension {
     openapi: string;
     components?: ComponentsObject;
@@ -20,19 +20,19 @@ export interface OpenApiObject extends SpecificationExtension {
 // Detailed Configuration Objects --------------------------------------------
 
 // Single Callback instance
-// TODO: NoTest
+// NOTE - NoTest
 export interface CallbackObject extends SpecificationExtension {
     [name: string]: PathItemObject; // | any ???
 }
 
 // Set of Callbacks, keyed by ???
-// TODO: NoTest
+// NOTE - NoTest
 export interface CallbacksObject extends SpecificationExtension {
     [name: string]: CallbackObject | ReferenceObject; // | any ???
 }
 
 // Various components of an overall application
-// TODO: PartialBuilder PartialTest
+// NOTE - PartialBuilder PartialTest
 export interface ComponentsObject extends SpecificationExtension {
     callbacks?: CallbacksObject;
     examples?: ExamplesObject;
@@ -42,7 +42,7 @@ export interface ComponentsObject extends SpecificationExtension {
     requestBodies?: RequestBodiesObject;
     responses?: ResponsesObject;
     schemas?: SchemasObject;
-    // TODO: securitySchemes?: SecuritySchemesObject;
+    // NOTE - securitySchemes?: SecuritySchemesObject;
 }
 
 // Contact information for application developer(s)
@@ -53,13 +53,13 @@ export interface ContactObject extends SpecificationExtension {
 }
 
 // Information about media types, keyed by media type
-// TODO: SkipBuilder NoTest
+// NOTE - SkipBuilder NoTest
 export interface ContentsObject {
     [mediaType: string]: MediaTypeObject;
 }
 
 // A particular example
-// TODO: NoBuilder NoTest
+// NOTE - NoBuilder NoTest
 export interface ExampleObject extends SpecificationExtension {
     description?: string;
     externalValue?: string; // URL to an example
@@ -68,7 +68,7 @@ export interface ExampleObject extends SpecificationExtension {
 }
 
 // Set of examples, keyed by example name
-// TODO: NoTest
+// NOTE - NoTest
 export interface ExamplesObject {
     [name: string]: ExampleObject | ReferenceObject;
 }
@@ -80,20 +80,20 @@ export interface ExternalDocsObject extends SpecificationExtension {
 }
 
 // Single HTTP Header
-// TODO: NoTest
+// NOTE - NoTest
 export interface HeaderObject extends ParametersObject {
     // "in" is disallowed
     // "name" is disallowed
 }
 
 // Information about HTTP Headers, keyed by header name
-// TODO: NoTest
+// NOTE - NoTest
 export interface HeadersObject {
     [name: string]: HeaderObject | ReferenceObject;
 }
 
 // General application information
-// TODO: PartialTest
+// NOTE - PartialTest
 export interface InfoObject extends SpecificationExtension {
     contact?: ContactObject;
     description?: string;
@@ -111,33 +111,33 @@ export interface LicenseObject extends SpecificationExtension {
 }
 
 // Information about a particular HTTP Link
-// TODO: PartialObject NoBuilder NoTest
+// NOTE - PartialObject NoBuilder NoTest
 export interface LinkObject extends SpecificationExtension {
     description?: string;
     operationId?: string;
     operationRef?: string;
-    // parameters?: LinkParametersObject; // TODO: ???
-    requestBody: any | string; // TODO: ???
+    // parameters?: LinkParametersObject; // NOTE - ???
+    requestBody: any | string; // NOTE - ???
     server?: ServerObject;
 }
 
 // Information about HTTP links, keyed by name
-// TODO: NoTest
+// NOTE - NoTest
 export interface LinksObject {
     [name: string]: LinkObject | ReferenceObject;
 }
 
 // Characteristics of a media type
-// TODO: PartialBuilder NoTest
+// NOTE - PartialBuilder NoTest
 export interface MediaTypeObject extends SpecificationExtension {
-    // encoding?: string; // TODO: Map???
+    // encoding?: string; // NOTE - Map???
     example?: any;
     examples?: { [name: string]: any };
     schema?: SchemaObject | ReferenceObject;
 }
 
 // Information about a specific HTTP operation on a path
-// TODO: PartialBuilder PartialTest
+// NOTE - PartialBuilder PartialTest
 export interface OperationObject extends SpecificationExtension {
     callbacks?: CallbacksObject;
     deprecated?: boolean;
@@ -154,7 +154,7 @@ export interface OperationObject extends SpecificationExtension {
 }
 
 // Description of a general parameter, not otherwise specialized
-// TODO: PartialBuilder PartialTest
+// NOTE - PartialBuilder PartialTest
 export interface ParameterObject extends SpecificationExtension {
     allowEmptyValue?: boolean;
     allowReserved?: boolean;
@@ -172,13 +172,13 @@ export interface ParameterObject extends SpecificationExtension {
 }
 
 // Information about multiple Parameters, keyed by parameter name
-// TODO: NoTest
+// NOTE - NoTest
 export interface ParametersObject {
     [name: string]: ParameterObject | ReferenceObject;
 }
 
 // A specific endpoint path with associated operations
-// TODO: NoTest
+// NOTE - NoTest
 export interface PathItemObject extends SpecificationExtension {
     $ref?: string;
     delete?: OperationObject;
@@ -196,7 +196,7 @@ export interface PathItemObject extends SpecificationExtension {
 }
 
 // Available endpoint paths, keyed by path
-// TODO: NoTest
+// NOTE - NoTest
 export interface PathsObject extends SpecificationExtension {
     [path: string]: PathItemObject | ReferenceObject;
 }
@@ -207,13 +207,13 @@ export interface ReferenceObject { // NOTE: No SpecificationExtension here
 }
 
 // Describes a set of RequestBodyObjects, keyed by ???
-// TODO: NoTest
+// NOTE - NoTest
 export interface RequestBodiesObject {
     [name: string]: RequestBodyObject | ReferenceObject;
 }
 
 // Describes a single request body
-// TODO: NoTest
+// NOTE - NoTest
 export interface RequestBodyObject extends SpecificationExtension {
     content?: ContentsObject;
     description?: string;
@@ -221,7 +221,7 @@ export interface RequestBodyObject extends SpecificationExtension {
 }
 
 // Describes a single response
-// TODO: NoTest
+// NOTE - NoTest
 export interface ResponseObject extends SpecificationExtension {
     content?: ContentsObject;
     description: string;
@@ -230,7 +230,7 @@ export interface ResponseObject extends SpecificationExtension {
 }
 
 // Describes a set of possible responses, keyed by HTTP status code
-// TODO: NoTest
+// NOTE - NoTest
 export interface ResponsesObject extends SpecificationExtension {
     // @ts-ignore
     default?: ResponseObject | ReferenceObject;
@@ -238,15 +238,15 @@ export interface ResponsesObject extends SpecificationExtension {
 }
 
 // Characteristics of an individual field in a schema
-// TODO: PartialBuilder PartialTest
+// NOTE - PartialBuilder PartialTest
 export interface SchemaObject extends SpecificationExtension {
-    // TODO: additionalProperties, allOf, anyOf, default,
-    // TODO: discriminator, enum, example,
-    // TODO: exclusiveMaximum, exclusiveMinimum, maximum,
-    // TODO: maxItems, maxLength, maxProperties, minimum, minItems,
-    // TODO: minLength, minProperties, multipleOf, not, oneOf,
-    // TODO: pattern, properties, readOnly, required, title,
-    // TODO: uniqueItems, xml, writeOnly,
+    // NOTE - additionalProperties, allOf, anyOf, default,
+    // NOTE - discriminator, enum, example,
+    // NOTE - exclusiveMaximum, exclusiveMinimum, maximum,
+    // NOTE - maxItems, maxLength, maxProperties, minimum, minItems,
+    // NOTE - minLength, minProperties, multipleOf, not, oneOf,
+    // NOTE - pattern, properties, readOnly, required, title,
+    // NOTE - uniqueItems, xml, writeOnly,
     deprecated?: boolean;
     description?: string;
     example?: ExampleObject;
@@ -259,19 +259,19 @@ export interface SchemaObject extends SpecificationExtension {
 }
 
 // Information about Schemas, keyed by schema name
-// TODO: NoTest
+// NOTE - NoTest
 export interface SchemasObject {
     [name: string]: SchemaObject | ReferenceObject;
 }
 
 // Information about application security requirements
-// TODO: NoBuilder NoTest
+// NOTE - NoBuilder NoTest
 export interface SecurityObject extends SpecificationExtension {
-    // TODO
+    // NOTE - not yet implemented
 }
 
 // Information about a particular server
-// TODO: PartialBuilder NoTest
+// NOTE - PartialBuilder NoTest
 export interface ServerObject extends SpecificationExtension {
     description?: string;
     url: string;
@@ -292,7 +292,7 @@ export interface TagObject extends SpecificationExtension {
 }
 
 // Available tag descriptions, keyed by tag name
-// TODO: NoTest
+// NOTE - NoTest
 export interface TagsObject extends SpecificationExtension {
     [tag: string]: TagObject;
 }

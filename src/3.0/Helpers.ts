@@ -57,7 +57,7 @@ export function parameterPath(name: string,
                               description: string,
                               type: string = STRING): ParameterObject {
     const builder = new ParameterObjectBuilder("path",
-        name === "name" ? "namePath" : name) // TODO - not generic!!!
+        name === "name" ? "namePath" : name) // NOTE - not generic!!!
         .description(description)
         .required(true)
         .schema(schemaRef(type))
@@ -132,7 +132,7 @@ export function schemaChildren(child: string, description: string, nullable: boo
         description,
         nullable
     );
-    // TODO - how to embed childrenRef
+    // NOTE - how to embed childrenRef
     return builder;
 }
 
@@ -165,7 +165,7 @@ export function schemaParent(parent: string, description: string, nullable: bool
         description,
         nullable
     );
-    // TODO - how to embed parentRef
+    // NOTE - how to embed parentRef
     return builder;
 }
 
