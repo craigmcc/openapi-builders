@@ -240,7 +240,7 @@ export class ParameterObjectBuilder {
         if (!this.target.name) {
             throw new Error("ParameterObjectBuilder.build: Missing required 'name' value");
         }
-        return this.target as ParameterObject;
+        return this.target;
     }
 
 }
