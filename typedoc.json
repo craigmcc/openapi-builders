@@ -1,0 +1,4 @@
+{
+  "plugin": ["typedoc-theme-yaf"],
+  "theme": "yaf"
+}

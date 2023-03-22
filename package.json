@@ -10,7 +10,8 @@
     "publish": "npm publish --access public .",
     "test": "mocha  src/**/*.test.ts",
     "test:watch": "mocha --watch src/**/*.test.ts",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "typedoc": "typedoc --cleanOutputDir --out apidocs src/3.0/index.ts"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,8 @@
     "chai": "^4.3.4",
     "mocha": "^10.1.0",
     "ts-node": "^10.2.0",
+    "typedoc": "^0.23.28",
+    "typedoc-theme-yaf": "^0.0.4",
     "typescript": "^5.0.2"
   },
   "dependencies": {
