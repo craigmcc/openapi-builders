@@ -2,6 +2,9 @@
 
 /**
  * Type definitions for supported components of the OpenAPI 3.1 Specification.
+ * These are defined in the
+ * [OpenAPI 3.1 Specification](https://github.com/OAI/OpenAPI-Specification/blob/3.1.0/versions/3.1.0.md)
+ * which includes examples of each object type.
  *
  * @packageDocumentation
  */
@@ -28,9 +31,21 @@ export interface CallbackObject extends SpecificationExtension {
  * All objects defined within the `components` object will have no effect
  * on the API unless they are explicitly referenced from properties
  * outside the `components` object.
+ *
+ * The keys in each map MUST match the regular expression
+ * `[a-zA-Z0-9\.\-_]`.
  */
 export interface ComponentsObject extends SpecificationExtension {
-    // TODO - flesh out
+    callbacks?: Map<string, CallbackObject | ReferenceObject>;
+    examples?: Map<string, ExampleObject | ReferenceObject>;
+    headers?: Map<string, HeaderObject | ReferenceObject>;
+    links?: Map<string, LinkObject | ReferenceObject>;
+    parameters?: Map<string, ParameterObject | ReferenceObject>;
+    pathItems?: Map<string, PathItemObject | ReferenceObject>;
+    requestBodies?: Map<string, RequestBodyObject>;
+    responses?: Map<string, ResponseObject | ReferenceObject>;
+    schemas?: Map<string, SchemaObject | ReferenceObject>;
+    securitySchemes?: Map<string, SecuritySchemeObject | ReferenceObject>;
 }
 
 /**
@@ -56,13 +71,20 @@ export interface ContactObject extends SpecificationExtension {
 }
 
 /**
+ * An example of usage of a particular object type.
+ */
+export interface ExampleObject extends SpecificationExtension {
+    // TODO - flesh out
+}
+
+/**
  * Reference to an external resource for extended information about the
  * exposed API.
  */
 export interface ExternalDocsObject extends SpecificationExtension {
 
     /**
-     * Description of the target documentatation.
+     * Description of the target documentation.
      * (CommonMark syntax)[https://spec.commonmark.org/] MAY be used
      * for rich text representation.
      */
@@ -82,8 +104,9 @@ export interface ExternalDocsObject extends SpecificationExtension {
  * * All traits that are affected by the location MUST be applicable to a
  *   location of `header` (for example, `style`).
  */
-export interface HeaderObject extends SpecificationExtension {
-    // TODO - flesh out (copy ParameterObject but leave out in and name)
+export interface HeaderObject extends ParameterObject {
+    // "in" is disallowed
+    // "name" is disallowed
 }
 
 /**
@@ -169,14 +192,65 @@ export interface LicenseObject extends SpecificationExtension {
  *
  * For computing links, and providing instructions to execute them, a
  * `runtime expression` is used for accessing values in an operation and using
- * them as parametwers while invoking the linked operation.
+ * them as parameters while invoking the linked operation.
+ *
+ * A linked operation MUST be identified using either an `operationRef` or
+ * `operationId`.  In the case of an `operationId`, it MUST be unique and
+ * resolved in the scope of the OAS document.  Because of the potential for
+ * name clashes, the `operationRef` syntax is preferred for OpenAPI
+ * documents with external references.
  */
 export interface LinkObject extends SpecificationExtension {
-    // TODO - flesh out
+
+    /**
+     * A description of the link.
+     * (CommonMarkSyntax)[https://spec.commonmark.org/]
+     * may be used for rich text representation.
+     */
+    description?: string;
+
+    /**
+     * The name of an *existing*, resolvable OAS operation, as defined with
+     * a unique `operationId`.  This field is mutually exclusive of the
+     * `operationRef` field.
+     */
+    operationId?: string;
+
+    /**
+     * A relative or absolute URI reference to an OAS operation.  This field
+     * is mutually exclusive of the `operationId` field, and MUST point to
+     * an `Operation Object`.  Relative `operationRef` values MAY be used
+     * to locate an existing `Operation Object` in the OpenAPI definition.
+     * See the rules for resolving `Relative References`.
+     */
+    operationRef?: string;
+
+    /**
+     * Map representing parameters to pass to an operation as specified with
+     * `operationId` or identified via `operationRef`.  The key is the
+     * parameter name to be used, whereas the value can be a constant or an
+     * expression to be evaluated and passed to the linked operation.  The
+     * parameter name can be qualified using the `parameter location`
+     * `[{in}].{name}` for operations that use the same parameter name
+     * in different locations (e.g. `path.id`).
+     */
+    parameters?: Map<string, any>;
+
+    /**
+     * A literal value or *{expression}* to use as a request body when calling
+     * the target operation.
+     */
+    requestBody?: any;
+
+    /**
+     * A server object to be used by the target operation.
+     */
+    server?: ServerObject;
+
 }
 
 /**
- * Provides schema and examles for the media type identified by its key.
+ * Provides schema and examples for the media type identified by its key.
  */
 export interface MediaTypeObject extends SpecificationExtension {
     // TODO - flesh out
@@ -224,7 +298,7 @@ export interface OpenApiObject extends SpecificationExtension {
      * Declaration of which security mechanisms can be used across this API.
      * The list of values includes alternative security requirement objects
      * that can be used.  Only one of the security requirement objects
-     * needs to be satisfied to autorize a request.  Individual operations
+     * needs to be satisfied to authorize a request.  Individual operations
      * can override this definition.
      */
     security?: SecurityRequirementsObject[];
@@ -354,9 +428,122 @@ export interface OperationObject extends SpecificationExtension {
 /**
  * Describes a single operation parameter.  A unique parameter is defined
  * by a combination of a `name` and `location`.
+ *
+ * The rules for serialization of the parameter are specified in one of two
+ * ways.  For simpler scenarios, a `schema` and `style` can describe the
+ * structure and syntax of the parameter.
+ *
+ * For more complex scenarios, the `content` property can define the media
+ * type and schema of the parameter.  A parameter MUST contain either a
+ * `schema` property or a `content` property, but not both.  When `example`
+ * or `examples` are provided in conjunction with the `schema` object,
+ * the example MUST follow the prescribed serialization strategy for the
+ * parameter.
  */
 export interface ParameterObject extends SpecificationExtension {
-    // TODO - flesh out
+
+    /**
+     * Sets the ability to pass empty-valued parameters.  This is valid only
+     * for `query` parameters and allows sending a parameter with an empty
+     * value.  Default value is `false`.
+     */
+    allowEmptyValue?: boolean;
+
+    /**
+     * Determines whether the parameter value SHOULD allow reserved characters,
+     * as defined by `RFC3986` to be included without percent-encoding.  This
+     * property only applies to parameters with an `in` value of `query`.
+     * The default value is `false`.
+     */
+    allowReserved?: boolean;
+
+    /**
+     * Specifies that a parameter is deprecated and SHOULD be transitioned
+     * out of usage.  Default value is `false`.
+     */
+    deprecated?: boolean;
+
+    /**
+     * A brief description of the parameter.  This could contain
+     * examples of use.
+     * (CommonMarkSyntax)[https://spec.commonmark.org/]
+     * may be used for rich text representation.
+     */
+    description?: string;
+
+    /**
+     * Example of the parameter's potential value.  The example SHOULD
+     * match the specified schema and encoding properties if present.
+     * The `example` field is mutually exclusive of the `examples` field.
+     * Furthermore, if referencing a `schema` that contains an example,
+     * the `example` value SHALL *override* the example given in the
+     * schema.  To represent examples of media types that cannot naturally
+     * be represented in JSON or YAML, a string value can contain the
+     * example with escaping where necessary.
+     */
+    example?: any; // Not ExampleObject | ReferenceObject ???
+
+    /**
+     * Examples of the parameter's potential value.  Each example SHOULD
+     * contain a value in the correct format as specified in the parameter
+     * encoding.  The `examples` field is mutually exclusive with the
+     * `example` field.  Furthermore, if referencing a `schema` that
+     * contains an example, the `examples` value SHALL override the example
+     * provided by the schema.
+     */
+    examples?: Map<string, ExampleObject | ReferenceObject>;
+
+    /**
+     * When this is true, parameter values of type `array` or `object`
+     * generate separate parameters for each value of the array or
+     * key-value pair of the map.  For other types of parameters, this
+     * property has no effect.  When `style` is `form`, the default value
+     * is `true`.  For all other styles, the default value is `false`.
+     */
+    explode?: boolean;
+
+    /**
+     * The location of the parameter.  Possible values are "query",
+     * "header", "path", or "cookie".
+     */
+    in: "cookie" | "header" | "path" | "query";
+
+    /**
+     * Name of the parameter.  Parameter names are *case-sensitive*.
+     * * If `in` is "path", the `name` field MUST correspond to a template
+     *   expression occurring within the `path` field in the `Paths Object`.
+     * * If `in` is "header" and the `name` field is "Accept",
+     *   "Content-Type", or "Authorization", the parameter definition
+     *   SHALL be ignored.
+     * * For all other cases, the `name` corresponds to the parameter name
+     *   used by the `in` property.
+     */
+    name: string;
+
+    /**
+     * Determines whether this parameter is mandatory.  If the
+     * `parameter location` is "path", this property is REQUIRED and its
+     * value must be `true`.  Otherwise, the property MAY be included and
+     * its default value is `false`.
+     */
+    required?: boolean;
+
+    /**
+     * The schema defining the type used for the parameter.
+     */
+    schema?: SchemaObject;
+
+    /**
+     * Describes how the parameter value will be serialized depending on the
+     * type of the parameter value.  Default values (based on the value
+     * of `in`):
+     * * For `query` - `form`.
+     * * For `path` - `simple`.
+     * * For `header` - `simple`.
+     * * For `cookie` - `form`.
+     */
+    style?: string;
+
 }
 
 /**
@@ -366,7 +553,83 @@ export interface ParameterObject extends SpecificationExtension {
  * parameters are available.
  */
 export interface PathItemObject extends SpecificationExtension {
-    // TODO - flesh out
+
+    /**
+     * Allows for a referenced definition of this path item.  The referenced
+     * structure MUST be in the form of a Path Item Object.  In case a
+     * Path Item Object field appears both in the defined object and the
+     * reference object, the behavior is undefined.
+     */
+    $ref?: string;
+
+    /**
+     * A definition of a DELETE operation on this path.
+     */
+    delete?: OperationObject;
+
+    /**
+     * An optional description, intended to apply to all operations in this path.
+     * (CommonMarkSyntax)[https://spec.commonmark.org/]
+     * may be used for rich text representation.
+     */
+    description?: string;
+
+    /**
+     * A definition of a GET operation on this path.
+     */
+    get?: OperationObject;
+
+    /**
+     * A definition of a HEAD operation on this path.
+     */
+    head?: OperationObject;
+
+    /**
+     * A definition of an OPTIONS operation on this path.
+     */
+    options?: OperationObject;
+
+    /**
+     * A list of parameters that are applicable for all operations
+     * described under this path.  These parameters can be overridden
+     * at the operation level, but cannot be removed there.  The list MUST NOT
+     * include duplicated parameters.  A unique parameter is defined by a
+     * combination of a `name` and `location`.  The list can use the
+     * `Reference Object` to link to parameters that are defined at the
+     * `OpenAPI Object`'s `components` `parameters` field.
+     */
+    parameters?: (ParameterObject | ReferenceObject)[];
+
+    /**
+     * A definition of a PATCH operation on this path.
+     */
+    patch?: OperationObject;
+
+    /**
+     * A definition of a POST operation on this path.
+     */
+    post?: OperationObject;
+
+    /**
+     * A definition of a PUT operation on this path.
+     */
+    put?: OperationObject;
+
+    /**
+     * An alternative `server` array to service all operations on this path.
+     */
+    servers?: ServerObject[];
+
+    /**
+     * An optional summary, intended to apply to all operations in this path.
+     */
+    summary?: string;
+
+    /**
+     * A definition of a TRACE operation on this path.
+     */
+    trace?: OperationObject;
+
 }
 
 /**
@@ -400,7 +663,7 @@ export interface ReferenceObject { // NOTE: No SpecificationExtension here
 
     /**
      * Description, which by default SHOULD override that of the referenced
-     * component.  If the referenced objecvt type does not allow a
+     * component.  If the referenced object type does not allow a
      * `description` field, then this field has no effect.
      * (CommonMarkSyntax)[https://spec.commonmark.org/]
      * may be used for rich text representation.
@@ -425,7 +688,7 @@ export interface RequestBodyObject extends SpecificationExtension {
      * The content of the request body.  The key is a media type
      * or media type range, and the value describes it.  For requests that
      * match multiple keys, only the most specific key is applicable (e.g.
-     * `text/plain` overrides `text/*`.
+     * `text/plain` overrides `text/*`).
      */
     content: Map<string, MediaTypeObject>;
 
@@ -474,7 +737,7 @@ export interface ResponseObject extends SpecificationExtension {
     headers?: Map<string, HeaderObject | ReferenceObject>;
 
     /**
-     * A map of operation links that can be followed from the resonse.  The
+     * A map of operation links that can be followed from the response.  The
      * key is a short name for the link, following the naming constraints of
      * the names for `Component Objects`.
      */
@@ -514,7 +777,7 @@ export interface ResponsesObject extends SpecificationExtension {
      * one property per code, to describe the expected response for that
      * HTTP status code.  This field MUST be enclosed in quotation marks
      * (for example, "200") for compatibility between JSON and YAML.  To
-     * define a range of resonse codes, this field MAY contain the uppercase
+     * define a range of response codes, this field MAY contain the uppercase
      * wildcard character `X`.  For example, `2XX` represents all response
      * codes between `[200-299]`.  Only the following range definitions
      * are allowed:  `1XX`, `2XX`, `3XX`, `4XX`, and `5XX`.  If a response
@@ -526,9 +789,43 @@ export interface ResponsesObject extends SpecificationExtension {
 }
 
 /**
- * TODO - flesh out
+ * Allows the definition of input and output data types.  These types can be
+ * objects, but also primitives and arrays.  This object is a superset of
+ * [JSON Schema Specification Draft 2020-12](https://tools.ietf.org/html/draft-bhutton-json-schema-00).
+ *
+ * For more information about the properties, see
+ * [JSON Schema Core](https://tools.ietf.org/html/draft-bhutton-json-schema-00) and
+ * [JSON Schema Validation](https://tools.ietf.org/html/draft-bhutton-json-schema-validation-00).
+ *
+ * Unless stated otherwise, the property definitions follow those of JSON
+ * Schema and do not add any additional semantics.  Where JSON Schema
+ * indicates that behavior is defined by the application (e.g. for
+ * annotations), OAS also defers the definition of semantics to the
+ * application consuming the OpenAPI document.
+ */
+export interface SchemaObject extends SpecificationExtension {
+    // TODO - flesh out
+}
+
+/**
+ * List the required security schemes to execute this operation.  The name
+ * used for each property MUST correspond to a security scheme declared in
+ * the `Security Schemes` under the `Components Object`.
  */
 export interface SecurityRequirementsObject extends SpecificationExtension {
+    // TODO - flesh out
+}
+
+/**
+ * Defines a security scheme that can be used by operations.
+ *
+ * Supported schemes are HTTP authentication, an API key (either as a header,
+ * a cookie parameter, or as a query parameter), mutual TLS (use of a client
+ * certificate), OAuth2's common flows (implicit, password, client credentials,
+ * and authorization code) as defined in `RFC6749`, and
+ * `OpenID Connect Discovery.
+ */
+export interface SecuritySchemeObject extends SpecificationExtension {
     // TODO - flesh out
 }
 
@@ -601,7 +898,7 @@ export interface TagObject extends SpecificationExtension {
     /**
      * A description for the tag.
      * (CommonMark syntax)[https://spec.commonmark.org/]
-     * MAY be used for rich text represenation.
+     * MAY be used for rich text representation.
      */
     description?: string;
 
