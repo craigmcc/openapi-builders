@@ -43,6 +43,19 @@ export function checkDuplicate(object: string, field: string, value: any): void 
 }
 
 /**
+ * Throw ValueError if the specified value is an empty array.
+ *
+ * @param object Name of the configuration object being checked
+ * @param field Name of the field being checked
+ * @param values Proposed array of values being checked
+ */
+export function checkEmpty(object: string, field: string, values: any[]): void {
+    if (values.length === 0) {
+        throw new ValueError(`${object} cannot accept an empty ${field} array`);
+    }
+}
+
+/**
  * Throw an ExclusiveError if a value is being proposed but there is an existing
  * value of a different field that is mutually exclusive.
  *
@@ -60,7 +73,21 @@ export function checkExclusive(object: string, field1: string, value1: any, fiel
 }
 
 /**
- * Throws a ValueError if the specified value is not a valud URL.
+ * Throws DuplicateError if the specified Map already contains the specified key.
+ *
+ * @param object Name of the configuration object being checked
+ * @param field Name of the field being checked
+ * @param map Map being checked
+ * @param key Key value to be checked
+ */
+export function checkMap(object: string, field: string, map: Map<any, any>, key: any): void {
+    if (map.has(key)) {
+        throw new DuplicateError(`${object} ${field} already has key ${key}`)
+    }
+}
+
+/**
+ * Throws a ValueError if the specified value is not a valid URL.
  *
  * @param object Name of the configuration object being checked
  * @param field Name of the field being checked

@@ -2,6 +2,8 @@
 
 /**
  * Builder Pattern classes for OpenAPI Specification configuration objects.
+ *
+ * @packageDocumentation
  */
 
 import {
@@ -15,9 +17,16 @@ import {
     PathsObject,
     SecurityRequirementsObject,
     ServerObject,
+    ServerVariableObject,
     TagObject,
 } from "./types";
-import {checkDuplicate, checkExclusive, checkURL} from "./Errors";
+import {
+    checkDuplicate,
+    checkEmpty,
+    checkExclusive,
+    checkMap,
+    checkURL
+} from "./Errors";
 
 /**
  * Builder for `ContactObject` objects.
@@ -50,6 +59,33 @@ export class ContactObjectBuilder {
     }
 
     public build(): ContactObject {
+        return this.target;
+    }
+
+}
+
+/**
+ * Builder for `ExternalDocs` objects.
+ * TODO: needs tests
+ */
+export class ExternalDocsObjectBuilder {
+
+    constructor(url: string) {
+        checkURL("ExternalDocsObject", "url", url);
+        this.target = {
+            url: url,
+        }
+    }
+
+    private target: ExternalDocsObject;
+
+    public description(description: string): ExternalDocsObjectBuilder {
+        checkDuplicate("ExternalDocsObject", "description", this.target.description);
+        this.target.description = description;
+        return this;
+    }
+
+    public build(): ExternalDocsObject {
         return this.target;
     }
 
@@ -227,3 +263,73 @@ export class OpenApiObjectBuilder {
 
 }
 
+/**
+ * Builder for `ServerObject` objects.
+ * TODO: needs tests
+ */
+export class ServerObjectBuilder {
+
+    constructor(url: string) {
+        checkURL("ServerObject", "url", url);
+        this.target = {
+            url: url,
+        }
+    }
+
+    private target: ServerObject;
+
+    public description(description: string): ServerObjectBuilder {
+        checkDuplicate("ServerObject", "description", this.target.description);
+        this.target.description = description;
+        return this;
+    }
+
+    // Convenience
+    public variable(name: string, variable: ServerVariableObject): ServerObjectBuilder {
+        if (!this.target.variables) {
+            this.target.variables = new Map<string, ServerVariableObject>();
+        }
+        checkMap("ServerObject", "variables", this.target.variables, name);
+        this.target.variables.set(name, variable);
+        return this;
+    }
+
+    public variables(variables: Map<string, ServerVariableObject>): ServerObjectBuilder {
+        checkDuplicate("ServerObject", "variables", this.target.variables);
+        return this;
+    }
+
+    public build(): ServerObject {
+        return this.target;
+    }
+
+}
+
+/**
+ * Builder for `ServerVariableObject` objects.
+ * TODO: needs tests
+ */
+export class ServerVariableObjectBuilder {
+
+    constructor(defaultValue: string) {
+        this.target = {
+            default: defaultValue,
+        }
+    }
+
+    private target: ServerVariableObject;
+
+    public description(description: string): ServerVariableObjectBuilder {
+        checkDuplicate("ServerVariableObject", "description", this.target.description);
+        this.target.description = description;
+        return this;
+    }
+
+    public enum(enumValues: string[]): ServerVariableObjectBuilder {
+        checkDuplicate("ServerVariableObject", "enum", this.target.enum);
+        checkEmpty("ServerVariableObject", "enum", enumValues);
+        this.target.enum = enumValues;
+        return this;
+    }
+
+}
