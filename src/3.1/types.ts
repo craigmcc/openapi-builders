@@ -9,6 +9,8 @@
  * @packageDocumentation
  */
 
+export type InType = "cookie" | "header" | "path" | "query";
+
 /**
  * A map of possible out-of-band callbacks related to the parent operation.
  * Each value in the map is a `Path Item Object` that describes a set of
@@ -42,7 +44,7 @@ export interface ComponentsObject extends SpecificationExtension {
     links?: Map<string, LinkObject | ReferenceObject>;
     parameters?: Map<string, ParameterObject | ReferenceObject>;
     pathItems?: Map<string, PathItemObject | ReferenceObject>;
-    requestBodies?: Map<string, RequestBodyObject>;
+    requestBodies?: Map<string, RequestBodyObject | ReferenceObject>;
     responses?: Map<string, ResponseObject | ReferenceObject>;
     schemas?: Map<string, SchemaObject | ReferenceObject>;
     securitySchemes?: Map<string, SecuritySchemeObject | ReferenceObject>;
@@ -74,7 +76,33 @@ export interface ContactObject extends SpecificationExtension {
  * An example of usage of a particular object type.
  */
 export interface ExampleObject extends SpecificationExtension {
-    // TODO - flesh out
+
+    /**
+     * Long description for the example.
+     * (CommonMark syntax)[https://spec.commonmark.org/] MAY be used
+     * for rich text representation.
+     */
+    description?: string;
+
+    /**
+     * URI that points to the literal example.  This provides the
+     * capability to reference examples that cannot easily be included
+     * in JSON or YAML documents.  The `value` field and
+     * `externalValue` are mutually exclusive.
+     */
+    externalValue?: string;
+
+    /**
+     * Short description for the example.
+     */
+    summary?: string;
+
+    /**
+     * Embedded literal example.  The `value` field and `externalValue` are
+     * mutually exclusive.
+     */
+    value?: any;
+
 }
 
 /**
@@ -105,8 +133,8 @@ export interface ExternalDocsObject extends SpecificationExtension {
  *   location of `header` (for example, `style`).
  */
 export interface HeaderObject extends ParameterObject {
-    // "in" is disallowed
-    // "name" is disallowed
+    // "in" is disallowed, is implicitly "header"
+    // "name" is disallowed, is implicitly the map key
 }
 
 /**
@@ -253,7 +281,40 @@ export interface LinkObject extends SpecificationExtension {
  * Provides schema and examples for the media type identified by its key.
  */
 export interface MediaTypeObject extends SpecificationExtension {
-    // TODO - flesh out
+
+    /**
+     * A map between a property name and its encoding information.
+     * The key, being the property name, MUST exist in the schema
+     * property.  The encoding object SHALL only apply to
+     * `requestBody` objects when the media type is `multipart` or
+     * `application/x-www-form-urlencoded`.
+     */
+    // TODO - encoding?: Map<string, EncodingObject>;
+
+    /**
+     * Example of the media type.  The example object SHOULD be in the
+     * correct format as specified by the media type.  The `example`
+     * field is mutually exclusive with the `examples` field.  Furthermore,
+     * if referencing a `schema` which contains an example, the example
+     * value SHALL *override* the example provided in the schema.
+     */
+    example?: ExampleObject | ReferenceObject; // Spec says "any" ???
+
+    /**
+     * Examples of the media type.  Each example object SHOULD match the
+     * media type and specified schema, if present.  The `example` field
+     * is mutually exclusive with the `examples` field.  Furthermore, if
+     * referencing a `schema` which contains an example, the `examples`
+     * value SHALL *override* the example provided by the schema.
+     */
+    examples?: Map<string, ExampleObject | ReferenceObject>;
+
+    /**
+     * The schema defining the content of the request, response, or
+     * parameter.
+     */
+    schema?: SchemaObject;
+
 }
 
 /**
@@ -481,7 +542,7 @@ export interface ParameterObject extends SpecificationExtension {
      * be represented in JSON or YAML, a string value can contain the
      * example with escaping where necessary.
      */
-    example?: any; // Not ExampleObject | ReferenceObject ???
+    example?: ExampleObject | ReferenceObject; // Spec says "any" ???
 
     /**
      * Examples of the parameter's potential value.  Each example SHOULD
@@ -506,7 +567,7 @@ export interface ParameterObject extends SpecificationExtension {
      * The location of the parameter.  Possible values are "query",
      * "header", "path", or "cookie".
      */
-    in: "cookie" | "header" | "path" | "query";
+    in: InType;
 
     /**
      * Name of the parameter.  Parameter names are *case-sensitive*.

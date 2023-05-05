@@ -73,6 +73,20 @@ export function checkExclusive(object: string, field1: string, value1: any, fiel
 }
 
 /**
+ * Throws DuplicateError if the specified (target) object already contains
+ * a property with the specified name.
+ *
+ * @param name Name of the configuration object being checked
+ * @param object Configuration object being checked
+ * @param field Name of the field to be checked
+ */
+export function checkField(name: string, object: any, field: string): void {
+    if (object.has(field)) {
+        throw new DuplicateError(`${name} already has a '${field} value`);
+    }
+}
+
+/**
  * Throws DuplicateError if the specified Map already contains the specified key.
  *
  * @param object Name of the configuration object being checked
