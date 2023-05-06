@@ -12,6 +12,19 @@
 export type InType = "cookie" | "header" | "path" | "query";
 
 /**
+ * Format validations defined in the [spec](https://datatracker.ietf.org/doc/html/draft-bhutton-json-schema-validation-01).
+ */
+export type SchemaFormatType =
+    "date" | "date-time" | "duration" | "email" | "hostname" |
+    "idn-email" | "idn-hostname" | "ipv4" | "ipv6" | "iri" |
+    "iri-reference" | "json-pointer|" | "regex" |
+    "relative-json-pointer" | "time" | "uri" | "uri-reference" |
+    "uri-template" | "uuid";
+
+export type SchemaObjectType =
+    "array" | "boolean" | "integer" | "null" | "number" | "object" | "string";
+
+/**
  * A map of possible out-of-band callbacks related to the parent operation.
  * Each value in the map is a `Path Item Object` that describes a set of
  * requests that may be initiated by the API provider and the expected
@@ -518,6 +531,8 @@ export interface ParameterObject extends SpecificationExtension {
      */
     allowReserved?: boolean;
 
+    // TODO - needs `content` property, mutually exclusive with `schema`, only one value in the map?
+
     /**
      * Specifies that a parameter is deprecated and SHOULD be transitioned
      * out of usage.  Default value is `false`.
@@ -604,6 +619,7 @@ export interface ParameterObject extends SpecificationExtension {
      * * For `cookie` - `form`.
      */
     style?: string;
+    // TODO - see spec for specific values
 
 }
 
@@ -863,9 +879,259 @@ export interface ResponsesObject extends SpecificationExtension {
  * indicates that behavior is defined by the application (e.g. for
  * annotations), OAS also defers the definition of semantics to the
  * application consuming the OpenAPI document.
+ *
+ * NOTE:  THIS IS *NOT* A COMPLETE TYPESCRIPT DEFINITION OF A SCHEMA OBJECT!
+ * IT HAS BEEN INFERRED FROM EXAMPLES WHILE I LOOK FOR A CANONICAL DEFINITION!
  */
 export interface SchemaObject extends SpecificationExtension {
-    // TODO - flesh out
+
+    // TODO:  $defs???
+
+    /**
+     * TODO - description
+     */
+    $dynamicAnchor?: string;
+
+    /**
+     * TODO - description
+     */
+    $id?: string;
+
+    /**
+     * TODO - description
+     */
+    $schema: string;
+
+    // TODO - additionalProperties???
+
+    /**
+     * This object MUST match all the specified schemas.
+     */
+    allOf?: (SchemaObject | ReferenceObject)[];
+
+    /**
+     * This object MUST match any one of the specified schemas.
+     */
+    anyOf?: (SchemaObject | ReferenceObject)[];
+
+    // TODO - contentEncoding???
+
+    // TODO - contentMediaType???
+
+    // TODO - contentSchema???
+
+    /**
+     * The property name (and optional mappings) used to disambiguate
+     * the selected schema to be used for validation.
+     */
+    discriminator?: SchemaDiscriminatorObject;
+
+    // TODO - items???
+
+    /**
+     * This object MUST match exactly one of the specified schemas.
+     */
+    oneOf?: (SchemaObject | ReferenceObject)[];
+
+    // TODO - patternProperties???
+
+    /**
+     * The individual properties of an "object".
+     */
+    properties?: Map<string, SchemaPropertyObject | ReferenceObject>;
+
+    /**
+     * List of property names that MUST be present in the object
+     * being validated.
+     */
+    required?: string[];
+
+    /**
+     * TODO: description
+     */
+    title?: string;
+
+    /**
+     * The type of schema object represented by this SchemaObject.
+     */
+    type: SchemaObjectType;
+
+    // XML Object not included
+
+}
+
+/**
+ * The property name (and optional mappings) used to discriminate
+ * between schemas to use in a polymorphism use case.
+ */
+export interface SchemaDiscriminatorObject extends SpecificationExtension {
+
+    /**
+     * Mappings between payload values and schema names or references.
+     */
+    mapping?: Map<string, string>;
+
+    /**
+     * The name of the property in the payload that will hold the
+     * discriminator value.
+     */
+    propertyName: string;
+
+}
+
+/**
+ * Description of an individual property in a schema description.  Validation
+ * constraints come from
+ * [JSON Schema Validation](https://datatracker.ietf.org/doc/html/draft-bhutton-json-schema-validation-01).
+ */
+export interface SchemaPropertyObject /* extends SpecificationExtension */ {
+
+    /**
+     * If present, the value of this property must match this constant.
+     * Functionally equivalent to an `enum` with this single value.
+     */
+    const?: string | number | null;
+
+    /**
+     * A default value for this property when it is not specified
+     */
+    default?: boolean | number | string | null;
+
+    // TODO - dependentRequired?
+
+    /**
+     * Flag indicating that this property has been deprecated or not.
+     * If not present, false is assumed?
+     */
+    deprecated?: boolean;
+
+    /**
+     * Optional description of this property for UI purposes.
+     */
+    description?: string;
+
+    /**
+     * The value of this property must match one of the listed values.
+     */
+    enum?: (string | number | null)[];
+
+    // TODO - example (deprecated, but like for other parts of the schema).
+
+    // TODO - examples (like for other parts of the schema).
+
+    /**
+     * The value of this property must be a number less than this value.
+     */
+    exclusiveMaximum?: number;
+
+    /**
+     * The value of this property must be a number greater than this value.
+     */
+    exclusiveMinimum?: number;
+
+    /**
+     * Constrain the value of this property according to the
+     * [Format Metadata Specification](https://json-schema.org/draft/2020-12/meta/format-annotation).
+     */
+    format?: SchemaFormatType;
+
+    // TODO - items???
+
+    /**
+     * The value of this property must be a number less than or equal
+     * to this value.
+     */
+    maximum?: number;
+
+    // TODO - maxContains???
+
+    /**
+     * The value of this property must be an array with a length
+     * less than or equal to this value.
+     */
+    maxItems?: number;
+
+    /**
+     * The value of this property must be a string whose length is less
+     * than or equal to this value.
+     */
+    maxLength?: number;
+
+    /**
+     * The value of this property must be an object that contains
+     * a number of properties less than or equal to this value.
+     */
+    maxProperties?: number;
+
+    /**
+     * The value of this property must be a number greater than or equal
+     * to this value.
+     */
+    minimum?: number;
+
+    // TODO - minContains???
+
+    /**
+     * The value of this property must be an array with a length
+     * greater than or equal to this value.
+     */
+    minItems?: number;
+
+    /**
+     * The value of this property must be a string whose length is greater
+     * than or equal to this value.
+     */
+    minLength?: number;
+
+    /**
+     * The value of this property must be an object that contains
+     * a number of properties greater than or equal to this value.
+     */
+    minProperties?: number;
+
+    /**
+     * The value of this property must be a number, strictly greater than zero,
+     * which when divided by the `multipleOf` value results in an integer.
+     */
+    multipleOf?: number;
+
+    /**
+     * The value of this property must be a string that matches the
+     * ECMA-262 regular expression defined by this value.
+     */
+    pattern?: string;
+
+    /**
+     * The value of this property should be considered to be read only.
+     * Defaults to false if not present.
+     */
+    readOnly?: boolean;
+
+    /**
+     * The value of this property must be an object, which contains all
+     * the listed property names.
+     */
+    required?: string[];
+
+    /**
+     * Optional title of this property, for UI purposes.
+     */
+    title?: string;
+
+    type: SchemaObjectType | SchemaObjectType[]; // TODO - different list for property types?
+
+    /**
+     * The value of this property must be an array which, if this value
+     * is true, must all be unique.  Default (if not specified) is false.
+     */
+    unique?: boolean;
+
+    /**
+     * The value of this property should be considered write only.
+     * Defaults to false if not present.
+     */
+    writeOnly?: boolean;
+
 }
 
 /**
