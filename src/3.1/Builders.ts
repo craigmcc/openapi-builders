@@ -27,7 +27,10 @@ import {
     RequestBodyObject,
     ResponseObject,
     ResponsesObject,
+    SchemaFormatType,
     SchemaObject,
+    SchemaObjectType,
+    SchemaPropertyObject,
     SecurityRequirementsObject,
     SecuritySchemeObject,
     ServerObject,
@@ -1112,7 +1115,258 @@ export class ResponsesObjectBuilder {
 
 }
 
-// TODO: SchemaObjectBuilder
+/**
+ * Builder for `SchemaObject` objects.
+ * TODO: needs tests
+ */
+export class SchemaObjectBuilder {
+
+    constructor(type: SchemaObjectType) {
+        this.target = {
+            type: type,
+        }
+    }
+
+    private target: SchemaObject;
+
+    $dynamicAnchor($dynamicAnchor: string): SchemaObjectBuilder {
+        checkField("SchemaObject", this.target, "$dynamicAnchor");
+        this.target.$dynamicAnchor = $dynamicAnchor;
+        return this;
+    }
+
+    $id($id: string): SchemaObjectBuilder {
+        checkField("SchemaObject", this.target, "$id");
+        this.target.$id = $id;
+        return this;
+    }
+
+    $schema($schema: string): SchemaObjectBuilder {
+        checkField("SchemaObject", this.target, "$schema");
+        this.target.$schema = $schema;
+        return this;
+    }
+
+    allOf(allOf: SchemaObject | ReferenceObject): SchemaObjectBuilder {
+        if (!this.target.allOf) {
+            this.target.allOf = [];
+        }
+        // TODO: checkArray() for duplicate value being added?
+        this.target.allOf.push(allOf);
+        return this;
+    }
+
+    anyOf(anyOf: SchemaObject | ReferenceObject): SchemaObjectBuilder {
+        if (!this.target.anyOf) {
+            this.target.anyOf = [];
+        }
+        // TODO: checkArray() for duplicate value being added?
+        this.target.anyOf.push(anyOf);
+        return this;
+    }
+
+    // TODO: discriminator()
+
+    // TODO: items()
+
+    oneOf(oneOf: SchemaObject | ReferenceObject): SchemaObjectBuilder {
+        if (!this.target.oneOf) {
+            this.target.oneOf = [];
+        }
+        // TODO: checkArray() for duplicate value being added?
+        this.target.oneOf.push(oneOf);
+        return this;
+    }
+
+    public property(name: string, property: SchemaPropertyObject | ReferenceObject): SchemaObjectBuilder {
+        if (!this.target.properties) {
+            this.target.properties = new Map();
+        }
+        checkMap("SchemaObject", "properties", this.target.variables, name);
+        this.target.variables.set(name, property);
+        return this;
+    }
+
+    public required(required: string): SchemaObjectBuilder {
+        if (!this.target.required) {
+            this.target.required = [];
+        }
+        // TODO: checkArray() for duplicate value being added?
+        this.target.required.push(required);
+        return this;
+    }
+
+    public title(title: string): SchemaObjectBuilder {
+        checkField("SchemaObject", this.target, "title");
+        this.target.title = title;
+        return this;
+    }
+
+    public build(): SchemaObject {
+        return this.target;
+    }
+
+}
+
+// TODO: SchemaDiscriminatorObjectBuilder
+
+/**
+ * Builder for `SchemaPropertyObject` objects.
+ * TODO: needs tests
+ */
+export class SchemaPropertyObjectBuilder {
+
+    constructor(type: SchemaObjectType | SchemaObjectType[]) {
+        this.target = {
+            type: type,
+        }
+    }
+
+    private target: SchemaPropertyObject;
+
+    public const(constValue: boolean | string | number | null): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "const");
+        this.target.const = constValue;
+        return this;
+    }
+
+    public default(defaultValue: boolean | string | number | null): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "default");
+        this.target.default = defaultValue;
+        return this;
+    }
+
+    public deprecated(deprecated: boolean): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "deprecated");
+        this.target.deprecated = deprecated;
+        return this;
+    }
+
+    public enum(value: string | number | null): SchemaPropertyObjectBuilder {
+        if (!this.target.enum) {
+            this.target.enum = [];
+        }
+        // TODO: checkArray() for duplicate value being added?
+        this.target.enum.push(value);
+        return this;
+    }
+
+    public exclusiveMaximum(exclusiveMaximum: number): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "exclusiveMaximum");
+        this.target.exclusiveMaximum = exclusiveMaximum;
+        return this;
+    }
+
+    public exclusiveMinimum(exclusiveMinimum: number): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "exclusiveMinimum");
+        this.target.exclusiveMinimum = exclusiveMinimum;
+        return this;
+    }
+
+    public format(format: SchemaFormatType): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "format");
+        this.target.format = format;
+        return this;
+    }
+
+    public maximum(maximum: number): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "maximum");
+        this.target.maximum = maximum;
+        return this;
+    }
+
+    public maxItems(maxItems: number): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "maxItems");
+        this.target.maxItems = maxItems;
+        return this;
+    }
+
+    public maxLength(maxLength: number): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "maxLength");
+        this.target.maxLength = maxLength;
+        return this;
+    }
+
+    public maxProperties(maxProperties: number): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "maxProperties");
+        this.target.maxProperties = maxProperties;
+        return this;
+    }
+
+    public minimum(minimum: number): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "minimum");
+        this.target.minimum = minimum;
+        return this;
+    }
+
+    public minItems(minItems: number): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "minItems");
+        this.target.minItems = minItems;
+        return this;
+    }
+
+    public minLength(minLength: number): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "minLength");
+        this.target.minLength = minLength;
+        return this;
+    }
+
+    public minProperties(minProperties: number): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "minProperties");
+        this.target.minProperties = minProperties;
+        return this;
+    }
+
+    public multipleOf(multipleOf: number): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "multipleOf");
+        this.target.multipleOf = multipleOf;
+        return this;
+    }
+
+    public pattern(pattern: string): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "pattern");
+        this.target.pattern = pattern;
+        return this;
+    }
+
+    public readOnly(readOnly: boolean): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "readOnly");
+        this.target.readOnly = readOnly;
+        return this;
+    }
+
+    public required(required: string): SchemaPropertyObjectBuilder {
+        if (!this.target.required) {
+            this.target.required = [];
+        }
+        // TODO: checkArray() for duplicate value being added?
+        this.target.required.push(required);
+        return this;
+    }
+
+    public title(title: string): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "title");
+        this.target.title = title;
+        return this;
+    }
+
+    public unique(unique: boolean): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "unique");
+        this.target.unique = unique;
+        return this;
+    }
+
+    public writeOnly(writeOnly: boolean): SchemaPropertyObjectBuilder {
+        checkField("SchemaPropertyObject", this.target, "writeOnly");
+        this.target.writeOnly = writeOnly;
+        return this;
+    }
+
+    public build(): SchemaPropertyObject {
+        return this.target;
+    }
+
+}
 
 /**
  * Builder for `ServerObject` objects.

@@ -900,7 +900,7 @@ export interface SchemaObject extends SpecificationExtension {
     /**
      * TODO - description
      */
-    $schema: string;
+    $schema?: string;
 
     // TODO - additionalProperties???
 
@@ -990,7 +990,7 @@ export interface SchemaPropertyObject /* extends SpecificationExtension */ {
      * If present, the value of this property must match this constant.
      * Functionally equivalent to an `enum` with this single value.
      */
-    const?: string | number | null;
+    const?: boolean | string | number | null;
 
     /**
      * A default value for this property when it is not specified
