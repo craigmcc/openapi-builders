@@ -34,7 +34,7 @@
     "chai": "^4.3.4",
     "mocha": "^10.1.0",
     "ts-node": "^10.2.0",
-    "typedoc": "^0.24.6",
+    "typedoc": "^0.24.7",
     "typedoc-theme-yaf": "^0.0.4",
     "typescript": "^5.0.4"
   },
