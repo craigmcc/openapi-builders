@@ -38,10 +38,10 @@ import {
     TagObject,
 } from "./types";
 import {
+    checkArray,
     checkDuplicate,
     checkEmpty,
     checkExclusive,
-    checkField,
     checkMap,
     checkURL,
     ValueError,
@@ -60,7 +60,7 @@ export class CallbackObjectBuilder {
     private target: CallbackObject;
 
     public callback(name: string, callback: PathItemObject | ReferenceObject): CallbackObjectBuilder {
-        checkField("CallbackObject", this.target, name);
+        checkDuplicate("CallbackObject", this.target, name);
         this.target[name] = callback;
         return this;
     }
@@ -86,7 +86,7 @@ export class ComponentsObjectBuilder {
 
     public callback(name: string, callback: CallbackObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.callbacks) {
-            checkMap("ComponentsObject", "callbacks", this.target.callbacks, name);
+            checkMap("ComponentsObject", this.target, "callbacks", name);
         } else {
             this.target.callbacks = new Map();
         }
@@ -96,7 +96,7 @@ export class ComponentsObjectBuilder {
 
     public example(name: string, example: ExampleObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.examples) {
-            checkMap("ComponentsObject", "examples", this.target.examples, name);
+            checkMap("ComponentsObject", this.target, "examples", name);
         } else {
             this.target.examples = new Map();
         }
@@ -106,7 +106,7 @@ export class ComponentsObjectBuilder {
 
     public header(name: string, header: HeaderObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.headers) {
-            checkMap("ComponentsObject", "headers", this.target.headers, name);
+            checkMap("ComponentsObject", this.target, "headers", name);
         } else {
             this.target.headers = new Map();
         }
@@ -116,7 +116,7 @@ export class ComponentsObjectBuilder {
 
     public link(name: string, link: LinkObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.links) {
-            checkMap("ComponentsObject", "links", this.target.links, name);
+            checkMap("ComponentsObject", this.target, "links", name);
         } else {
             this.target.links = new Map();
         }
@@ -126,7 +126,7 @@ export class ComponentsObjectBuilder {
 
     public parameter(name: string, parameter: ParameterObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.parameters) {
-            checkMap("ComponentsObject", "parameters", this.target.parameters, name);
+            checkMap("ComponentsObject", this.target, "parameters", name);
         } else {
             this.target.parameters = new Map();
         }
@@ -136,7 +136,7 @@ export class ComponentsObjectBuilder {
 
     public pathItem(name: string, pathItem: PathItemObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.pathItems) {
-            checkMap("ComponentsObject", "pathItems", this.target.pathItems, name);
+            checkMap("ComponentsObject", this.target, "pathItems", name);
         } else {
             this.target.pathItems = new Map();
         }
@@ -146,7 +146,7 @@ export class ComponentsObjectBuilder {
 
     public requestBody(name: string, requestBody: RequestBodyObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.requestBodies) {
-            checkMap("ComponentsObject", "requestBodies", this.target.requestBodies, name);
+            checkMap("ComponentsObject", this.target, "requestBodies", name);
         } else {
             this.target.requestBodies = new Map();
         }
@@ -156,7 +156,7 @@ export class ComponentsObjectBuilder {
 
     public response(name: string, response: ResponseObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.responses) {
-            checkMap("ComponentsObject", "responses", this.target.responses, name);
+            checkMap("ComponentsObject", this.target, "responses", name);
         } else {
             this.target.responses = new Map();
         }
@@ -166,7 +166,7 @@ export class ComponentsObjectBuilder {
 
     public schema(name: string, schema: SchemaObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.schemas) {
-            checkMap("ComponentsObject", "schemas", this.target.schemas, name);
+            checkMap("ComponentsObject", this.target, "schemas", name);
         } else {
             this.target.schemas = new Map();
         }
@@ -176,7 +176,7 @@ export class ComponentsObjectBuilder {
 
     public securityScheme(name: string, securityScheme: SecuritySchemeObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.securitySchemes) {
-            checkMap("ComponentsObject", "securitySchemes", this.target.securitySchemes, name);
+            checkMap("ComponentsObject", this.target,"securitySchemes", name);
         } else {
             this.target.securitySchemes = new Map();
         }
@@ -202,20 +202,20 @@ export class ContactObjectBuilder {
     private target: ContactObject;
 
     public email(email: string): ContactObjectBuilder {
-        checkDuplicate("ContactObject", "email", this.target.email);
+        checkDuplicate("ContactObject", this.target,"email");
         this.target.email = email;
         return this;
     }
 
     public name(name: string): ContactObjectBuilder {
-        checkDuplicate("ContactObject", "name", this.target.name);
+        checkDuplicate("ContactObject", this.target, "name");
         this.target.name = name;
         return this;
     }
 
     public url(url: string): ContactObjectBuilder {
-        checkDuplicate("ContactObject", "url", this.target.url);
-        checkURL("ContactObject", "url", url);
+        checkDuplicate("ContactObject", this.target, "url");
+        checkURL("ContactObject", this.target,"url", url);
         this.target.url = url;
         return this;
     }
@@ -239,25 +239,27 @@ export class ExampleObjectBuilder {
     private target: ExampleObject;
 
     public description(description: string): ExampleObjectBuilder {
-        checkDuplicate("ExampleObject", "description", this.target.description);
+        checkDuplicate("ExampleObject", this.target, "description");
         this.target.description = description;
         return this;
     }
 
     public externalValue(externalValue: string) {
-        checkExclusive("ExampleObject", "externalValue", externalValue, "value", this.target.value);
+        checkDuplicate("ExampleObject", this.target, "externalValue");
+        checkExclusive("ExampleObject", this.target, "externalValue", "value");
         this.target.externalValue = externalValue;
         return this;
     }
 
     public summary(summary: string): ExampleObjectBuilder {
-        checkDuplicate("ExampleObject", "description", this.target.summary);
+        checkDuplicate("ExampleObject", this.target, "summary");
         this.target.summary = summary;
         return this;
     }
 
     public value(value: any): ExampleObjectBuilder {
-        checkExclusive("ExampleObject", "value", value, "externalValue", this.target.externalValue);
+        checkDuplicate("ExampleObject", this.target, "value");
+        checkExclusive("ExampleObject", this.target, "value", "externalValue");
         this.target.value = value;
         return this;
     }
@@ -275,16 +277,16 @@ export class ExampleObjectBuilder {
 export class ExternalDocsObjectBuilder {
 
     constructor(url: string) {
-        checkURL("ExternalDocsObject", "url", url);
         this.target = {
             url: url,
         }
+        checkURL("ExternalDocsObject", this.target, "url", url);
     }
 
     private target: ExternalDocsObject;
 
     public description(description: string): ExternalDocsObjectBuilder {
-        checkDuplicate("ExternalDocsObject", "description", this.target.description);
+        checkDuplicate("ExternalDocsObject", this.target, "description");
         this.target.description = description;
         return this;
     }
@@ -311,31 +313,31 @@ export class HeaderObjectBuilder {
     private target: HeaderObject;
 
     allowEmptyValue(allowEmptyValue: boolean): HeaderObjectBuilder {
-        checkField("HeaderObject", this.target, "allowEmptyValue");
+        checkDuplicate("HeaderObject", this.target, "allowEmptyValue");
         this.target.allowEmptyValue = allowEmptyValue;
         return this;
     }
 
     allowReserved(allowReserved: boolean): HeaderObjectBuilder {
-        checkField("HeaderObject", this.target, "allowReserved");
+        checkDuplicate("HeaderObject", this.target, "allowReserved");
         this.target.allowReserved = allowReserved;
         return this;
     }
 
     deprecated(deprecated: boolean): HeaderObjectBuilder {
-        checkField("HeaderObject", this.target, "deprecated");
+        checkDuplicate("HeaderObject", this.target, "deprecated");
         this.target.deprecated = deprecated;
         return this;
     }
 
     description(description: string): HeaderObjectBuilder {
-        checkField("HeaderObject", this.target, "description");
+        checkDuplicate("HeaderObject", this.target, "description");
         this.target.description = description;
         return this;
     }
 
     example(example: ExampleObject | ReferenceObject): HeaderObjectBuilder {
-        checkField("HeaderObject", this.target, "example");
+        checkDuplicate("HeaderObject", this.target, "example");
         this.target.example = example;
         return this;
     }
@@ -343,7 +345,7 @@ export class HeaderObjectBuilder {
     // Cannot overload example() method name
     examples(name: string, example: ExampleObject | ReferenceObject): HeaderObjectBuilder {
         if (this.target.examples) {
-            checkMap("HeaderObject", "examples", this.target.examples, name);
+            checkMap("HeaderObject", this.target, "examples", name);
         } else {
             this.target.examples = new Map();
         }
@@ -352,25 +354,25 @@ export class HeaderObjectBuilder {
     }
 
     explode(explode: boolean): HeaderObjectBuilder {
-        checkField("HeaderObject", this.target, "explode");
+        checkDuplicate("HeaderObject", this.target, "explode");
         this.target.explode = explode;
         return this;
     }
 
     required(required: boolean): HeaderObjectBuilder {
-        checkField("HeaderObject", this.target, "required");
+        checkDuplicate("HeaderObject", this.target, "required");
         this.target.required = required;
         return this;
     }
 
     schema(schema: SchemaObject): HeaderObjectBuilder {
-        checkField("HeaderObject", this.target, "schema");
+        checkDuplicate("HeaderObject", this.target, "schema");
         this.target.schema = schema;
         return this;
     }
 
     style(style: string): HeaderObjectBuilder {
-        checkField("HeaderObject", this.target, "style");
+        checkDuplicate("HeaderObject", this.target, "style");
         this.target.style = style;
         return this;
     }
@@ -395,32 +397,32 @@ export class InfoObjectBuilder {
     private target: InfoObject;
 
     public contact(contact: ContactObject): InfoObjectBuilder {
-        checkDuplicate("InfoObject", "contact", this.target.contact);
+        checkDuplicate("InfoObject", this.target, "contact");
         this.target.contact = contact;
         return this;
     }
 
     public description(description: string): InfoObjectBuilder {
-        checkDuplicate("InfoObject", "description", this.target.description);
+        checkDuplicate("InfoObject", this.target, "description");
         this.target.description = description;
         return this;
     }
 
     public license(license: LicenseObject): InfoObjectBuilder {
-        checkDuplicate("InfoObject", "license", this.target.license);
+        checkDuplicate("InfoObject", this.target, "license");
         this.target.license = license;
         return this;
     }
 
     public summary(summary: string): InfoObjectBuilder {
-        checkDuplicate("InfoObject", "summary", this.target.summary);
+        checkDuplicate("InfoObject", this.target, "summary");
         this.target.summary = summary;
         return this;
     }
 
     public termsOfService(termsOfService: string): InfoObjectBuilder {
-        checkDuplicate("InfoObject", "termsOfService", this.target.termsOfService);
-        checkURL("InfoObject", "termsOfService", termsOfService);
+        checkDuplicate("InfoObject", this.target, "termsOfService");
+        checkURL("InfoObject", this.target, "termsOfService", termsOfService);
         this.target.termsOfService = termsOfService;
         return this;
     }
@@ -445,18 +447,16 @@ export class LicenseObjectBuilder {
     private target: LicenseObject;
 
     public identifier(identifier: string): LicenseObjectBuilder {
-        checkDuplicate("LicenseObject", "identifier", this.target.identifier);
-        checkExclusive("LicenseObject", "identifier", identifier,
-            "url", this.target.url);
+        checkDuplicate("LicenseObject", this.target, "identifier");
+        checkExclusive("LicenseObject", this.target, "identifier",  "url");
         this.target.identifier = identifier;
         return this;
     }
 
     public url(url: string): LicenseObjectBuilder {
-        checkDuplicate("LicenseObject", "url", this.target.url);
-        checkExclusive("LicenseObject", "url", url,
-            "identifier", this.target.identifier);
-        checkURL("LicenseObject", "url", url);
+        checkDuplicate("LicenseObject", this.target, "url");
+        checkExclusive("LicenseObject", this.target, "url", "identifier");
+        checkURL("LicenseObject", this.target, "url", url);
         this.target.url = url;
         return this;
     }
@@ -480,26 +480,28 @@ export class LinkObjectBuilder {
     private target: LinkObject;
 
     public description(description: string): LinkObjectBuilder {
-        checkField("LinkObject", this.target, "description");
+        checkDuplicate("LinkObject", this.target, "description");
         this.target.description = description;
         return this;
     }
 
     public operationId(operationId: string): LinkObjectBuilder {
-        checkExclusive("LinkObject", "operationId", operationId, "operationRef", this.target.operationRef);
+        checkDuplicate("LinkObject", this.target, "operationId");
+        checkExclusive("LinkObject", this.target,"operationId", "operationRef");
         this.target.operationId = operationId;
         return this;
     }
 
     public operationRef(operationRef: string): LinkObjectBuilder {
-        checkExclusive("LinkObject", "operationRef", operationRef, "operationId", this.target.operationId);
+        checkDuplicate("LinkObject", this.target, "operationRef");
+        checkExclusive("LinkObject", this.target, "operationRef", "operationId");
         this.target.operationRef = operationRef;
         return this;
     }
 
     public parameter(name: string, parameter: any): LinkObjectBuilder {
         if (this.target.parameters) {
-            checkMap("LinkObject", "parameters", this.target.parameters, name);
+            checkMap("LinkObject", this.target, "parameters", name);
         } else {
             this.target.parameters = new Map();
         }
@@ -508,13 +510,13 @@ export class LinkObjectBuilder {
     }
 
     public requestBody(requestBody: any): LinkObjectBuilder {
-        checkDuplicate("LinkObject", "requestBody", this.target.requestBody);
+        checkDuplicate("LinkObject", this.target, "requestBody");
         this.target.requestBody = requestBody;
         return this;
     }
 
     public server(server: ServerObject): LinkObjectBuilder {
-        checkDuplicate("LinkObject", "server", this.target.server);
+        checkDuplicate("LinkObject", this.target, "server");
         this.target.server = server;
         return this;
     }
@@ -538,16 +540,18 @@ export class MediaTypeObjectBuilder {
     private target: MediaTypeObject;
 
     example(example: ExampleObject | ReferenceObject): MediaTypeObjectBuilder {
-        checkExclusive("MediaTypeObject","example", example, "examples", this.target.examples);
+        checkDuplicate("MediaTypeObject", this.target, "example");
+        checkExclusive("MediaTypeObject", this.target, "example", "examples");
         this.target.example = example;
         return this;
     }
 
     // Cannot overload example() method name
     examples(name: string, example: ExampleObject | ReferenceObject): MediaTypeObjectBuilder {
-        checkExclusive("MediaTypeObject", "examples", example, "example", this.target.example);
+        checkDuplicate("MediaTypeObject", this.target, "examples");
+        checkExclusive("MediaTypeObject", this.target, "examles", "example");
         if (this.target.examples) {
-            checkMap("ParameterObject", "examples", this.target.examples, name);
+            checkMap("ParameterObject", this.target, "examples", name);
         } else {
             this.target.examples = new Map();
         }
@@ -660,7 +664,7 @@ export class OperationObjectBuilder {
 
     public callback(name: string, callback: CallbackObject | ReferenceObject): OperationObjectBuilder {
         if (this.target.callbacks) {
-            checkMap("OperationObject", "callbacks", this.target.callbacks, name);
+            checkMap("OperationObject", this.target, "callbacks", name);
         } else {
             this.target.callbacks = new Map();
         }
@@ -669,25 +673,25 @@ export class OperationObjectBuilder {
     }
 
     public deprecated(deprecated: boolean): OperationObjectBuilder {
-        checkField("OperationObject", this.target,"deprecated");
+        checkDuplicate("OperationObject", this.target,"deprecated");
         this.target.deprecated = deprecated;
         return this;
     }
 
     public description(description: string): OperationObjectBuilder {
-        checkField("OperationObject", this.target, "description");
+        checkDuplicate("OperationObject", this.target, "description");
         this.target.description = description;
         return this;
     }
 
     public externalDocs(externalDocs: ExternalDocsObject): OperationObjectBuilder {
-        checkField("OperationObject", this.target, "externalDocs");
+        checkDuplicate("OperationObject", this.target, "externalDocs");
         this.target.externalDocs = externalDocs;
         return this;
     }
 
     public operationId(operationId: string): OperationObjectBuilder {
-        checkField("OperationObject", this.target, "operationId");
+        checkDuplicate("OperationObject", this.target, "operationId");
         this.target.operationId = operationId;
         return this;
     }
@@ -702,7 +706,7 @@ export class OperationObjectBuilder {
     }
 
     public requestBody(requestBody: RequestBodyObject | ReferenceObject): OperationObjectBuilder {
-        checkField("OperationObject", this.target, "requestBody");
+        checkDuplicate("OperationObject", this.target, "requestBody");
         this.target.requestBody = requestBody;
         return this;
     }
@@ -710,13 +714,13 @@ export class OperationObjectBuilder {
     // TODO: This is a little clumsy, but hard to articulate how to add default and
     // TODO: other responses individually
     public responses(responses: ResponsesObject): OperationObjectBuilder {
-        checkField("OperationObject", this.target, "resonses");
+        checkDuplicate("OperationObject", this.target, "responses");
         this.target.responses = responses;
         return this;
     }
 
     public security(security: SecurityRequirementsObject): OperationObjectBuilder {
-        checkField("OperationObject", this.target, "security");
+        checkDuplicate("OperationObject", this.target, "security");
         this.target.security = security;
         return this;
     }
@@ -761,40 +765,42 @@ export class ParameterObjectBuilder {
     private target: ParameterObject;
 
     allowEmptyValue(allowEmptyValue: boolean): ParameterObjectBuilder {
-        checkField("ParameterObject", this.target, "allowEmptyValue");
+        checkDuplicate("ParameterObject", this.target, "allowEmptyValue");
         this.target.allowEmptyValue = allowEmptyValue;
         return this;
     }
 
     allowReserved(allowReserved: boolean): ParameterObjectBuilder {
-        checkField("ParameterObject", this.target, "allowReserved");
+        checkDuplicate("ParameterObject", this.target, "allowReserved");
         this.target.allowReserved = allowReserved;
         return this;
     }
 
     deprecated(deprecated: boolean): ParameterObjectBuilder {
-        checkField("ParameterObject", this.target, "deprecated");
+        checkDuplicate("ParameterObject", this.target, "deprecated");
         this.target.deprecated = deprecated;
         return this;
     }
 
     description(description: string): ParameterObjectBuilder {
-        checkField("ParameterObject", this.target, "description");
+        checkDuplicate("ParameterObject", this.target, "description");
         this.target.description = description;
         return this;
     }
 
     example(example: ExampleObject | ReferenceObject): ParameterObjectBuilder {
-        checkExclusive("ParameterObject", "example", example, "examples", this.target.examples);
+        checkDuplicate("ParameterObject", this.target, "example");
+        checkExclusive("ParameterObject", this.target, "example", "examples");
         this.target.example = example;
         return this;
     }
 
     // Cannot overload example() method name
     examples(name: string, example: ExampleObject | ReferenceObject): ParameterObjectBuilder {
-        checkExclusive("ParameterObject", "examples", example, "example", this.target.example);
+        checkDuplicate("ParameterObject", this.target, "examples");
+        checkExclusive("ParameterObject", this.target, "examples","example");
         if (this.target.examples) {
-            checkMap("ParameterObject", "examples", this.target.examples, name);
+            checkMap("ParameterObject", this.target, "examples", name);
         } else {
             this.target.examples = new Map();
         }
@@ -803,25 +809,25 @@ export class ParameterObjectBuilder {
     }
 
     explode(explode: boolean): ParameterObjectBuilder {
-        checkField("ParameterObject", this.target, "explode");
+        checkDuplicate("ParameterObject", this.target, "explode");
         this.target.explode = explode;
         return this;
     }
 
     required(required: boolean): ParameterObjectBuilder {
-        checkField("ParameterObject", this.target, "required");
+        checkDuplicate("ParameterObject", this.target, "required");
         this.target.required = required;
         return this;
     }
 
     schema(schema: SchemaObject): ParameterObjectBuilder {
-        checkField("ParameterObject", this.target, "schema");
+        checkDuplicate("ParameterObject", this.target, "schema");
         this.target.schema = schema;
         return this;
     }
 
     style(style: string): ParameterObjectBuilder {
-        checkField("ParameterObject", this.target, "style");
+        checkDuplicate("ParameterObject", this.target, "style");
         this.target.style = style;
         return this;
     }
@@ -842,37 +848,37 @@ export class PathItemObjectBuilder {
     }
 
     public $ref($ref: string): PathItemObjectBuilder {
-        checkField("PathItemObject", this.target, "$ref");
+        checkDuplicate("PathItemObject", this.target, "$ref");
         this.target.$ref = $ref;
         return this;
     }
 
     public delete(deleteValue: OperationObject): PathItemObjectBuilder {
-        checkField("PathItemObject", this.target, "delete");
+        checkDuplicate("PathItemObject", this.target, "delete");
         this.target.delete = deleteValue;
         return this;
     }
 
     public description(description: string): PathItemObjectBuilder {
-        checkField("PathItemObject", this.target, "description");
+        checkDuplicate("PathItemObject", this.target, "description");
         this.target.description = description;
         return this;
     }
 
     public get(get: OperationObject): PathItemObjectBuilder {
-        checkField("PathItemObject", this.target, "get");
+        checkDuplicate("PathItemObject", this.target, "get");
         this.target.get = get;
         return this;
     }
 
     public head(head: OperationObject): PathItemObjectBuilder {
-        checkField("PathItemObject", this.target, "head");
+        checkDuplicate("PathItemObject", this.target, "head");
         this.target.head = head;
         return this;
     }
 
     public options(options: OperationObject): PathItemObjectBuilder {
-        checkField("PathItemObject", this.target, "options");
+        checkDuplicate("PathItemObject", this.target, "options");
         this.target.options = options;
         return this;
     }
@@ -887,19 +893,19 @@ export class PathItemObjectBuilder {
     }
 
     public patch(patch: OperationObject): PathItemObjectBuilder {
-        checkField("PathItemObject", this.target, "patch");
+        checkDuplicate("PathItemObject", this.target, "patch");
         this.target.patch = patch;
         return this;
     }
 
     public post(post: OperationObject): PathItemObjectBuilder {
-        checkField("PathItemObject", this.target, "post");
+        checkDuplicate("PathItemObject", this.target, "post");
         this.target.post = post;
         return this;
     }
 
     public put(put: OperationObject): PathItemObjectBuilder {
-        checkField("PathItemObject", this.target, "put");
+        checkDuplicate("PathItemObject", this.target, "put");
         this.target.put = put;
         return this;
     }
@@ -914,13 +920,13 @@ export class PathItemObjectBuilder {
     }
 
     public summary(summary: string): PathItemObjectBuilder {
-        checkField("PathItemObject", this.target, "summary");
+        checkDuplicate("PathItemObject", this.target, "summary");
         this.target.summary = summary;
         return this;
     }
 
     public trace(trace: OperationObject): PathItemObjectBuilder {
-        checkField("PathItemObject", this.target, "trace");
+        checkDuplicate("PathItemObject", this.target, "trace");
         this.target.trace = trace;
         return this;
     }
@@ -946,7 +952,7 @@ export class PathsObjectBuilder {
     private target: PathsObject;
 
     public pathItem(path: string, pathItem: PathItemObject): PathsObjectBuilder {
-        checkField("PathsObject", this.target, path);
+        checkDuplicate("PathsObject", this.target, path);
         if (!path.startsWith("/")) {
             throw new ValueError(`Path '${path}' does not start with a slash`);
         }
@@ -975,13 +981,13 @@ export class ReferenceObjectBuilder {
     private target: ReferenceObject;
 
     public description(description: string): ReferenceObjectBuilder {
-        checkField("ReferenceObject", this.target, "description");
+        checkDuplicate("ReferenceObject", this.target, "description");
         this.target.description = description;
         return this;
     }
 
     public summary(summary: string): ReferenceObjectBuilder {
-        checkField("ReferenceObject", this.target, "summary");
+        checkDuplicate("ReferenceObject", this.target, "summary");
         this.target.summary = summary;
         return this;
     }
@@ -1008,19 +1014,19 @@ export class RequestBodyObjectBuilder {
 
     // The content Map is required, but let's add entries one at a time.
     public content(type: string, mediaType: MediaTypeObject): RequestBodyObjectBuilder {
-        checkMap("RequestBodyObject", "content", this.target.content, type);
+        checkMap("RequestBodyObject", this.target, "content", type);
         this.target.content.set(type, mediaType);
         return this;
     }
 
     public description(description: string): RequestBodyObjectBuilder {
-        checkField("RequestBodyObject", this.target, "description");
+        checkDuplicate("RequestBodyObject", this.target, "description");
         this.target.description = description;
         return this;
     }
 
     public required(required: boolean): RequestBodyObjectBuilder {
-        checkField("RequestBodyObject", this.target, "required");
+        checkDuplicate("RequestBodyObject", this.target, "required");
         this.target.required = required;
         return this;
     }
@@ -1048,14 +1054,15 @@ export class ResponseObjectBuilder {
     public content(type: string, mediaType: MediaTypeObject): ResponseObjectBuilder {
         if (!this.target.content) {
             this.target.content = new Map();
+        } else {
+            checkMap("ResponseObject", this.target, "content", type);
         }
-        checkMap("ResponseObject", "content", this.target.content, type);
         this.target.content.set(type, mediaType);
         return this;
     }
 
     public description(description: string): ResponseObjectBuilder {
-        checkField("ResponseObject", this.target, "description");
+        checkDuplicate("ResponseObject", this.target, "description");
         this.target.description = description;
         return this;
     }
@@ -1063,8 +1070,9 @@ export class ResponseObjectBuilder {
     public header(name: string, header: HeaderObject | ReferenceObject): ResponseObjectBuilder {
         if (!this.target.headers) {
             this.target.headers = new Map();
-        }
-        checkMap("ResponseObject", "headers", this.target.headers, name);
+        } else {
+            checkMap("ResponseObject", this.target, "headers", name);
+         }
         this.target.headers.set(name, header);
         return this;
     }
@@ -1072,8 +1080,9 @@ export class ResponseObjectBuilder {
     public link(key: string, link: LinkObject | ReferenceObject): ResponseObjectBuilder {
         if (!this.target.links) {
             this.target.links = new Map();
+        } else {
+            checkMap("ResponseObject", this.target, "links", key);
         }
-        checkMap("ResponseObject", "links", this.target.links, key);
         this.target.links.set(key, link);
         return this;
     }
@@ -1097,13 +1106,13 @@ export class ResponsesObjectBuilder {
     private target: ResponsesObject;
 
     public default(defaultValue: ResponseObject | ReferenceObject): ResponsesObjectBuilder {
-        checkField("ResponsesObject", this.target, "default");
+        checkDuplicate("ResponsesObject", this.target, "default");
         this.target.default = defaultValue;
         return this;
     }
 
     public statusCode(statusCode: string, response: ResponseObject | ReferenceObject): ResponsesObjectBuilder {
-        checkField("ResponsesObject", this.target, "statusCode");
+        checkDuplicate("ResponsesObject", this.target, "statusCode");
         // TODO - check for three digit code in the right range?
         this.target[statusCode] = response;
         return this;
@@ -1130,19 +1139,19 @@ export class SchemaObjectBuilder {
     private target: SchemaObject;
 
     $dynamicAnchor($dynamicAnchor: string): SchemaObjectBuilder {
-        checkField("SchemaObject", this.target, "$dynamicAnchor");
+        checkDuplicate("SchemaObject", this.target, "$dynamicAnchor");
         this.target.$dynamicAnchor = $dynamicAnchor;
         return this;
     }
 
     $id($id: string): SchemaObjectBuilder {
-        checkField("SchemaObject", this.target, "$id");
+        checkDuplicate("SchemaObject", this.target, "$id");
         this.target.$id = $id;
         return this;
     }
 
     $schema($schema: string): SchemaObjectBuilder {
-        checkField("SchemaObject", this.target, "$schema");
+        checkDuplicate("SchemaObject", this.target, "$schema");
         this.target.$schema = $schema;
         return this;
     }
@@ -1150,8 +1159,9 @@ export class SchemaObjectBuilder {
     allOf(allOf: SchemaObject | ReferenceObject): SchemaObjectBuilder {
         if (!this.target.allOf) {
             this.target.allOf = [];
+        } else {
+            checkArray("SchemaObject", this.target, "allOf", allOf);
         }
-        // TODO: checkArray() for duplicate value being added?
         this.target.allOf.push(allOf);
         return this;
     }
@@ -1159,8 +1169,9 @@ export class SchemaObjectBuilder {
     anyOf(anyOf: SchemaObject | ReferenceObject): SchemaObjectBuilder {
         if (!this.target.anyOf) {
             this.target.anyOf = [];
+        } else {
+            checkArray("SchemaObject", this.target, "anyOf", anyOf);
         }
-        // TODO: checkArray() for duplicate value being added?
         this.target.anyOf.push(anyOf);
         return this;
     }
@@ -1172,8 +1183,9 @@ export class SchemaObjectBuilder {
     oneOf(oneOf: SchemaObject | ReferenceObject): SchemaObjectBuilder {
         if (!this.target.oneOf) {
             this.target.oneOf = [];
+        } else {
+            checkArray("SchemaObject", this.target, "oneOf", oneOf);
         }
-        // TODO: checkArray() for duplicate value being added?
         this.target.oneOf.push(oneOf);
         return this;
     }
@@ -1181,23 +1193,25 @@ export class SchemaObjectBuilder {
     public property(name: string, property: SchemaPropertyObject | ReferenceObject): SchemaObjectBuilder {
         if (!this.target.properties) {
             this.target.properties = new Map();
+        } else {
+            checkMap("SchemaObject", this.target, "properties", name);
         }
-        checkMap("SchemaObject", "properties", this.target.variables, name);
-        this.target.variables.set(name, property);
+        this.target.properties.set(name, property);
         return this;
     }
 
     public required(required: string): SchemaObjectBuilder {
         if (!this.target.required) {
             this.target.required = [];
+        } else {
+            checkArray("SchemaObject", this.target, "required", required);
         }
-        // TODO: checkArray() for duplicate value being added?
         this.target.required.push(required);
         return this;
     }
 
     public title(title: string): SchemaObjectBuilder {
-        checkField("SchemaObject", this.target, "title");
+        checkDuplicate("SchemaObject", this.target, "title");
         this.target.title = title;
         return this;
     }
@@ -1225,19 +1239,19 @@ export class SchemaPropertyObjectBuilder {
     private target: SchemaPropertyObject;
 
     public const(constValue: boolean | string | number | null): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "const");
+        checkDuplicate("SchemaPropertyObject", this.target, "const");
         this.target.const = constValue;
         return this;
     }
 
     public default(defaultValue: boolean | string | number | null): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "default");
+        checkDuplicate("SchemaPropertyObject", this.target, "default");
         this.target.default = defaultValue;
         return this;
     }
 
     public deprecated(deprecated: boolean): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "deprecated");
+        checkDuplicate("SchemaPropertyObject", this.target, "deprecated");
         this.target.deprecated = deprecated;
         return this;
     }
@@ -1245,92 +1259,93 @@ export class SchemaPropertyObjectBuilder {
     public enum(value: string | number | null): SchemaPropertyObjectBuilder {
         if (!this.target.enum) {
             this.target.enum = [];
+        } else {
+            checkArray("SchemaPropertyObject", this.target, "enum", value);
         }
-        // TODO: checkArray() for duplicate value being added?
         this.target.enum.push(value);
         return this;
     }
 
     public exclusiveMaximum(exclusiveMaximum: number): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "exclusiveMaximum");
+        checkDuplicate("SchemaPropertyObject", this.target, "exclusiveMaximum");
         this.target.exclusiveMaximum = exclusiveMaximum;
         return this;
     }
 
     public exclusiveMinimum(exclusiveMinimum: number): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "exclusiveMinimum");
+        checkDuplicate("SchemaPropertyObject", this.target, "exclusiveMinimum");
         this.target.exclusiveMinimum = exclusiveMinimum;
         return this;
     }
 
     public format(format: SchemaFormatType): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "format");
+        checkDuplicate("SchemaPropertyObject", this.target, "format");
         this.target.format = format;
         return this;
     }
 
     public maximum(maximum: number): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "maximum");
+        checkDuplicate("SchemaPropertyObject", this.target, "maximum");
         this.target.maximum = maximum;
         return this;
     }
 
     public maxItems(maxItems: number): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "maxItems");
+        checkDuplicate("SchemaPropertyObject", this.target, "maxItems");
         this.target.maxItems = maxItems;
         return this;
     }
 
     public maxLength(maxLength: number): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "maxLength");
+        checkDuplicate("SchemaPropertyObject", this.target, "maxLength");
         this.target.maxLength = maxLength;
         return this;
     }
 
     public maxProperties(maxProperties: number): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "maxProperties");
+        checkDuplicate("SchemaPropertyObject", this.target, "maxProperties");
         this.target.maxProperties = maxProperties;
         return this;
     }
 
     public minimum(minimum: number): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "minimum");
+        checkDuplicate("SchemaPropertyObject", this.target, "minimum");
         this.target.minimum = minimum;
         return this;
     }
 
     public minItems(minItems: number): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "minItems");
+        checkDuplicate("SchemaPropertyObject", this.target, "minItems");
         this.target.minItems = minItems;
         return this;
     }
 
     public minLength(minLength: number): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "minLength");
+        checkDuplicate("SchemaPropertyObject", this.target, "minLength");
         this.target.minLength = minLength;
         return this;
     }
 
     public minProperties(minProperties: number): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "minProperties");
+        checkDuplicate("SchemaPropertyObject", this.target, "minProperties");
         this.target.minProperties = minProperties;
         return this;
     }
 
     public multipleOf(multipleOf: number): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "multipleOf");
+        checkDuplicate("SchemaPropertyObject", this.target, "multipleOf");
         this.target.multipleOf = multipleOf;
         return this;
     }
 
     public pattern(pattern: string): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "pattern");
+        checkDuplicate("SchemaPropertyObject", this.target, "pattern");
         this.target.pattern = pattern;
         return this;
     }
 
     public readOnly(readOnly: boolean): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "readOnly");
+        checkDuplicate("SchemaPropertyObject", this.target, "readOnly");
         this.target.readOnly = readOnly;
         return this;
     }
@@ -1338,26 +1353,27 @@ export class SchemaPropertyObjectBuilder {
     public required(required: string): SchemaPropertyObjectBuilder {
         if (!this.target.required) {
             this.target.required = [];
+        } else {
+            checkArray("SchemaPropertyObject", this.target, "required", required);
         }
-        // TODO: checkArray() for duplicate value being added?
         this.target.required.push(required);
         return this;
     }
 
     public title(title: string): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "title");
+        checkDuplicate("SchemaPropertyObject", this.target, "title");
         this.target.title = title;
         return this;
     }
 
     public unique(unique: boolean): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "unique");
+        checkDuplicate("SchemaPropertyObject", this.target, "unique");
         this.target.unique = unique;
         return this;
     }
 
     public writeOnly(writeOnly: boolean): SchemaPropertyObjectBuilder {
-        checkField("SchemaPropertyObject", this.target, "writeOnly");
+        checkDuplicate("SchemaPropertyObject", this.target, "writeOnly");
         this.target.writeOnly = writeOnly;
         return this;
     }
@@ -1375,16 +1391,16 @@ export class SchemaPropertyObjectBuilder {
 export class ServerObjectBuilder {
 
     constructor(url: string) {
-        checkURL("ServerObject", "url", url);
         this.target = {
             url: url,
         }
+        checkURL("ServerObject", this.target,"url", url);
     }
 
     private target: ServerObject;
 
     public description(description: string): ServerObjectBuilder {
-        checkDuplicate("ServerObject", "description", this.target.description);
+        checkDuplicate("ServerObject", this.target, "description");
         this.target.description = description;
         return this;
     }
@@ -1392,15 +1408,11 @@ export class ServerObjectBuilder {
     // Convenience
     public variable(name: string, variable: ServerVariableObject): ServerObjectBuilder {
         if (!this.target.variables) {
-            this.target.variables = new Map<string, ServerVariableObject>();
+            this.target.variables = new Map();
+        } else {
+            checkMap("ServerObject", this.target, "variables", name);
         }
-        checkMap("ServerObject", "variables", this.target.variables, name);
         this.target.variables.set(name, variable);
-        return this;
-    }
-
-    public variables(variables: Map<string, ServerVariableObject>): ServerObjectBuilder {
-        checkDuplicate("ServerObject", "variables", this.target.variables);
         return this;
     }
 
@@ -1425,14 +1437,14 @@ export class ServerVariableObjectBuilder {
     private target: ServerVariableObject;
 
     public description(description: string): ServerVariableObjectBuilder {
-        checkDuplicate("ServerVariableObject", "description", this.target.description);
+        checkDuplicate("ServerVariableObject", this.target, "description");
         this.target.description = description;
         return this;
     }
 
     public enum(enumValues: string[]): ServerVariableObjectBuilder {
-        checkDuplicate("ServerVariableObject", "enum", this.target.enum);
-        checkEmpty("ServerVariableObject", "enum", enumValues);
+        checkDuplicate("ServerVariableObject", this.target, "enum");
+        checkEmpty("ServerVariableObject", this.target,"enum", enumValues);
         this.target.enum = enumValues;
         return this;
     }

@@ -53,7 +53,7 @@ describe("LicenseObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown DuplicateError");
         } catch (error) {
             if (error instanceof DuplicateError) {
-                expect(error.message).to.equal(`LicenseObject already has identifier '${LICENSE_IDENTIFIER}'`);
+                expect(error.message).to.equal(`LicenseObject already has field 'identifier'`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
@@ -69,7 +69,7 @@ describe("LicenseObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown DuplicateError");
         } catch (error) {
             if (error instanceof DuplicateError) {
-                expect(error.message).to.equal(`LicenseObject already has url '${LICENSE_URL}'`);
+                expect(error.message).to.equal(`LicenseObject already has field 'url'`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
@@ -84,7 +84,7 @@ describe("LicenseObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown ExclusiveError");
         } catch (error) {
             if (error instanceof ExclusiveError) {
-                expect(error.message).to.include("LicenseObject cannot have both identifier and url");
+                expect(error.message).to.equal(`LicenseObject already has field 'identifier' so cannot add field 'url'`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
@@ -99,7 +99,7 @@ describe("LicenseObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown ExclusiveError");
         } catch (error) {
             if (error instanceof ExclusiveError) {
-                expect(error.message).to.include("LicenseObject cannot have both url and identifier");
+                expect(error.message).to.equal(`LicenseObject already has field 'url' so cannot add field 'identifier'`);
             }
         }
     });
@@ -112,7 +112,7 @@ describe("LicenseObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown ValueError");
         } catch (error) {
             if (error instanceof ValueError) {
-                expect(error.message).to.equal(`LicenseObject url must be a valid URL`);
+                expect(error.message).to.equal(`LicenseObject 'url' must be a valid URL`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }

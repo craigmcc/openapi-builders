@@ -54,7 +54,7 @@ describe("ContactObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown DuplicateError");
         } catch (error) {
             if (error instanceof DuplicateError) {
-                expect(error.message).to.equal(`ContactObject already has email '${CONTACT_EMAIL}'`);
+                expect(error.message).to.equal(`ContactObject already has field 'email'`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
@@ -70,7 +70,7 @@ describe("ContactObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown DuplicateError");
         } catch (error) {
             if (error instanceof DuplicateError) {
-                expect(error.message).to.equal(`ContactObject already has name '${CONTACT_NAME}'`);
+                expect(error.message).to.equal(`ContactObject already has field 'name'`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
@@ -86,7 +86,7 @@ describe("ContactObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown DuplicateError");
         } catch (error) {
             if (error instanceof DuplicateError) {
-                expect(error.message).to.equal(`ContactObject already has url '${CONTACT_URL}'`);
+                expect(error.message).to.equal(`ContactObject already has field 'url'`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
@@ -101,7 +101,7 @@ describe("ContactObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown ValueError");
         } catch (error) {
             if (error instanceof ValueError) {
-                expect(error.message).to.equal(`ContactObject url must be a valid URL`);
+                expect(error.message).to.equal(`ContactObject 'url' must be a valid URL`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }

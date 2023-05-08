@@ -69,7 +69,7 @@ describe("InfoObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown DuplicateError");
         } catch (error) {
             if (error instanceof DuplicateError) {
-                expect(error.message).to.equal(`InfoObject already has contact '${JSON.stringify(INFO_CONTACT)}'`);
+                expect(error.message).to.equal(`InfoObject already has field 'contact'`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
@@ -85,7 +85,7 @@ describe("InfoObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown DuplicateError");
         } catch (error) {
             if (error instanceof DuplicateError) {
-                expect(error.message).to.equal(`InfoObject already has description '${INFO_DESCRIPTION}'`);
+                expect(error.message).to.equal(`InfoObject already has field 'description'`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
@@ -101,7 +101,7 @@ describe("InfoObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown DuplicateError");
         } catch (error) {
             if (error instanceof DuplicateError) {
-                expect(error.message).to.equal(`InfoObject already has license '${JSON.stringify(INFO_LICENSE)}'`);
+                expect(error.message).to.equal(`InfoObject already has field 'license'`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
@@ -117,7 +117,7 @@ describe("InfoObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown DuplicateError");
         } catch (error) {
             if (error instanceof DuplicateError) {
-                expect(error.message).to.equal(`InfoObject already has summary '${INFO_SUMMARY}'`);
+                expect(error.message).to.equal(`InfoObject already has field 'summary'`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
@@ -133,7 +133,7 @@ describe("InfoObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown DuplicateError");
         } catch (error) {
             if (error instanceof DuplicateError) {
-                expect(error.message).to.equal(`InfoObject already has termsOfService '${INFO_TERMS_OF_SERVICE}'`);
+                expect(error.message).to.equal(`InfoObject already has field 'termsOfService'`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
@@ -148,7 +148,7 @@ describe("InfoObjectBuilder (3.1.0)", () => {
             expect.fail("Should have thrown ValueError");
         } catch (error) {
             if (error instanceof ValueError) {
-                expect(error.message).to.equal(`InfoObject termsOfService must be a valid URL`);
+                expect(error.message).to.equal(`InfoObject 'termsOfService' must be a valid URL`);
             } else {
                 expect.fail(`Should not have thrown '${error}'`);
             }
