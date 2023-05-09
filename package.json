@@ -1,8 +1,9 @@
 {
   "name": "@craigmcc/openapi-builders",
-  "version": "2.0.2",
+  "version": "3.0.0-alpha.8",
   "description": "Builder Pattern generators to create OpenAPI Specification files.",
   "main": "dist/index.js",
+  "private": false,
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",

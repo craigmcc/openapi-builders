@@ -326,7 +326,7 @@ export interface MediaTypeObject extends SpecificationExtension {
      * The schema defining the content of the request, response, or
      * parameter.
      */
-    schema?: SchemaObject;
+    schema?: SchemaObject | ReferenceObject;
 
 }
 

@@ -94,6 +94,14 @@ export class ComponentsObjectBuilder {
         return this;
     }
 
+    // Convenience - add them individually
+    public callbacks(callbacks: Map<string, CallbackObject | ReferenceObject>): ComponentsObjectBuilder {
+        for (const [name, callback] of callbacks.entries()) {
+            this.callback(name, callback);
+        }
+        return this;
+    }
+
     public example(name: string, example: ExampleObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.examples) {
             checkMap("ComponentsObject", this.target, "examples", name);
@@ -101,6 +109,14 @@ export class ComponentsObjectBuilder {
             this.target.examples = new Map();
         }
         this.target.examples.set(name, example);
+        return this;
+    }
+
+    // Convenience - add them individually
+    public examples(examples: Map<string, ExampleObject | ReferenceObject>): ComponentsObjectBuilder {
+        for (const [name, example] of examples.entries()) {
+            this.example(name, example);
+        }
         return this;
     }
 
@@ -114,6 +130,14 @@ export class ComponentsObjectBuilder {
         return this;
     }
 
+    // Convenience - add them individually
+    public headers(headers: Map<string, HeaderObject | ReferenceObject>): ComponentsObjectBuilder {
+        for (const [name, header] of headers.entries()) {
+            this.header(name, header);
+        }
+        return this;
+    }
+
     public link(name: string, link: LinkObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.links) {
             checkMap("ComponentsObject", this.target, "links", name);
@@ -121,6 +145,14 @@ export class ComponentsObjectBuilder {
             this.target.links = new Map();
         }
         this.target.links.set(name, link);
+        return this;
+    }
+
+    // Convenience - add them individually
+    public links(links: Map<string, LinkObject | ReferenceObject>): ComponentsObjectBuilder {
+        for (const [name, link] of links.entries()) {
+            this.link(name, link);
+        }
         return this;
     }
 
@@ -134,6 +166,14 @@ export class ComponentsObjectBuilder {
         return this;
     }
 
+    // Convenience - add them individually
+    public parameters(parameters: Map<string, ParameterObject | ReferenceObject>): ComponentsObjectBuilder {
+        for (const [name, parameter] of parameters.entries()) {
+            this.parameter(name, parameter);
+        }
+        return this;
+    }
+
     public pathItem(name: string, pathItem: PathItemObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.pathItems) {
             checkMap("ComponentsObject", this.target, "pathItems", name);
@@ -141,6 +181,14 @@ export class ComponentsObjectBuilder {
             this.target.pathItems = new Map();
         }
         this.target.pathItems.set(name, pathItem);
+        return this;
+    }
+
+    // Convenience - add them individually
+    public pathItems(pathItems: Map<string, PathItemObject | ReferenceObject>): ComponentsObjectBuilder {
+        for (const [name, pathItem] of pathItems.entries()) {
+            this.pathItem(name, pathItem);
+        }
         return this;
     }
 
@@ -154,6 +202,14 @@ export class ComponentsObjectBuilder {
         return this;
     }
 
+    // Convenience - add them individually
+    public requestBodies(requestBodies: Map<string, RequestBodyObject | ReferenceObject>): ComponentsObjectBuilder {
+        for (const [name, requestBody] of requestBodies.entries()) {
+            this.requestBody(name, requestBody);
+        }
+        return this;
+    }
+
     public response(name: string, response: ResponseObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.responses) {
             checkMap("ComponentsObject", this.target, "responses", name);
@@ -161,6 +217,14 @@ export class ComponentsObjectBuilder {
             this.target.responses = new Map();
         }
         this.target.responses.set(name, response);
+        return this;
+    }
+
+    // Convenience - add them individually
+    public responses(responses: Map<string, ResponseObject | ReferenceObject>): ComponentsObjectBuilder {
+        for (const [name, response] of responses.entries()) {
+            this.response(name, response);
+        }
         return this;
     }
 
@@ -174,6 +238,14 @@ export class ComponentsObjectBuilder {
         return this;
     }
 
+    // Convenience - add them individually
+    public schemas(schemas: Map<string, SchemaObject | ReferenceObject>): ComponentsObjectBuilder {
+        for (const [name, schema] of schemas.entries()) {
+            this.schema(name, schema);
+        }
+        return this;
+    }
+
     public securityScheme(name: string, securityScheme: SecuritySchemeObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.securitySchemes) {
             checkMap("ComponentsObject", this.target,"securitySchemes", name);
@@ -181,6 +253,14 @@ export class ComponentsObjectBuilder {
             this.target.securitySchemes = new Map();
         }
         this.target.securitySchemes.set(name, securityScheme);
+        return this;
+    }
+
+    // Convenience - add them individually
+    public securitySchemes(securitySchemes: Map<string, SecuritySchemeObject | ReferenceObject>): ComponentsObjectBuilder {
+        for (const [name, securityScheme] of securitySchemes.entries()) {
+            this.securityScheme(name, securityScheme);
+        }
         return this;
     }
 
@@ -559,6 +639,12 @@ export class MediaTypeObjectBuilder {
         return this;
     }
 
+    schema(schema: SchemaObject | ReferenceObject): MediaTypeObjectBuilder {
+        checkDuplicate("MediaTypeObject", this.target, "schema");
+        this.target.schema = schema;
+        return this;
+    }
+
     public build(): MediaTypeObject {
         return this.target;
     }
@@ -581,64 +667,84 @@ export class OpenApiObjectBuilder {
     private target: OpenApiObject;
 
     public components(components: ComponentsObject): OpenApiObjectBuilder {
+        checkDuplicate("OpenApiObject", this.target, "components");
         this.target.components = components;
         return this;
     }
 
     public externalDocs(externalDocs: ExternalDocsObject): OpenApiObjectBuilder {
+        checkDuplicate("OpenApiObject", this.target, "externalDocs");
         this.target.externalDocs = externalDocs;
         return this;
     }
 
     public jsonSchemaDialect(jsonSchemaDialect: string): OpenApiObjectBuilder {
+        checkDuplicate("OpenApiObject", this.target, "jsonSchemaDialect");
         this.target.jsonSchemaDialect = jsonSchemaDialect;
         return this;
     }
 
-    // Convenience
-    public pathItem(path: string, pathItem: PathItemObject): OpenApiObjectBuilder {
-        if (!this.target.paths) {
-            this.target.paths = {};
+    public path(path: string, pathItem: PathItemObject): OpenApiObjectBuilder {
+        if (this.target.paths) {
+            checkDuplicate("OpenApiObject", this.target.paths, path);
+        } else {
+            this.target.paths = new PathsObjectBuilder().build();
         }
         this.target.paths[path] = pathItem;
         return this;
     }
 
-    public pathItems(paths: PathsObject): OpenApiObjectBuilder {
-        this.target.paths = paths;
+    // Convenience - add them individually
+    public paths(paths: PathsObject): OpenApiObjectBuilder {
+        for (const path in paths) {
+            this.path(path, paths[path]);
+        }
         return this;
     }
 
-    public security(security: SecurityRequirementsObject[]): OpenApiObjectBuilder {
-        this.target.security = security;
+    public security(security: SecurityRequirementsObject): OpenApiObjectBuilder {
+        if (this.target.security) {
+            checkArray("OpenApiProject", this.target, "security", security);
+        } else {
+            this.target.security = [];
+        }
+        this.target.security.push(security);
         return this;
     }
 
-    // Convenience
     public server(server: ServerObject): OpenApiObjectBuilder {
-        if (!this.target.servers) {
+        if (this.target.servers) {
+            checkArray("OpenApiObject", this.target, "servers", server);
+        } else {
             this.target.servers = [];
         }
         this.target.servers.push(server);
         return this;
     }
 
+    // Convenience - add them individually
     public servers(servers: ServerObject[]): OpenApiObjectBuilder {
-        this.target.servers = servers;
+        for (const server of servers) {
+            this.server(server);
+        }
         return this;
     }
 
-    // Convenience
     public tag(tag: TagObject): OpenApiObjectBuilder {
-        if (!this.target.tags) {
+        if (this.target.tags) {
+            checkArray("OpenApiProject", this.target, "tags", tag);
+        } else {
             this.target.tags = [];
         }
         this.target.tags.push(tag);
         return this;
     }
 
+    // Convenience - add them individually
     public tags(tags: TagObject[]): OpenApiObjectBuilder {
-        this.target.tags = tags;
+        for (const tag of tags) {
+            this.tag(tag);
+        }
         return this;
     }
 
@@ -1256,6 +1362,12 @@ export class SchemaPropertyObjectBuilder {
         return this;
     }
 
+    public description(description: string): SchemaPropertyObjectBuilder {
+        checkDuplicate("SchemaPropertyObject", this.target, "description")
+        this.target.description = description;
+        return this;
+    }
+
     public enum(value: string | number | null): SchemaPropertyObjectBuilder {
         if (!this.target.enum) {
             this.target.enum = [];
@@ -1447,6 +1559,37 @@ export class ServerVariableObjectBuilder {
         checkEmpty("ServerVariableObject", this.target,"enum", enumValues);
         this.target.enum = enumValues;
         return this;
+    }
+
+}
+
+/**
+ * Builder for `TagObject` objects.
+ */
+export class TagObjectBuilder {
+
+    constructor(name: string) {
+        this.target = {
+            name: name
+        }
+    }
+
+    public description(description: string): TagObjectBuilder {
+        checkDuplicate("TagObject", this.target, "description");
+        this.target.description = description;
+        return this;
+    }
+
+    public externalDocs(externalDocs: ExternalDocsObject): TagObjectBuilder {
+        checkDuplicate("TagObject", this.target, "externalDocs");
+        this.target.externalDocs = externalDocs;
+        return this;
+    }
+
+    private target: TagObject;
+
+    public build(): TagObject {
+        return this.target;
     }
 
 }

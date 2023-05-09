@@ -29,6 +29,23 @@ export class ValueError extends Error {
 // Error Helpers -------------------------------------------------------------
 
 /**
+ * Throws DuplicateError if the specified Array already contains the specified value.
+ *
+ * @param name Name of the configuration object being checked
+ * @param object Configuration object being checked
+ * @param field Name of the field being checked (an Array)
+ * @param value Value to be checked
+ */
+export function checkArray(name: string, object: any, field: string, value: any): void {
+    const array = object[field] as Array<any>;
+    array.forEach(item => {
+        if (deepEqual(item, value)) {
+            throw new DuplicateError(`${name} '${field}' array already has value '${value}'`);
+        }
+    })
+}
+
+/**
  * Throw a DuplicateError if the specified field is already defined.
  *
  * @param name Name of the configuration object being checked
@@ -71,23 +88,6 @@ export function checkExclusive(name: string, object: any, fieldNew: string, fiel
 }
 
 /**
- * Throws DuplicateError if the specified Array already contains the specified value.
- *
- * @param name Name of the configuration object being checked
- * @param object Configuration object being checked
- * @param field Name of the field being checked (an Array)
- * @param value Value to be checked
- */
-export function checkArray(name: string, object: any, field: string, value: any): void {
-    const array = object.get(field) as Array<any>;
-    array.forEach(item => {
-        if (item.deepEqual(value)) {
-            throw new DuplicateError(`${name} '${field}' array already has value '${value}'`);
-        }
-    })
-}
-
-/**
  * Throws DuplicateError if the specified Map already contains the specified key.
  *
  * @param name Name of the configuration object being checked
@@ -96,7 +96,7 @@ export function checkArray(name: string, object: any, field: string, value: any)
  * @param key Key value to be checked
  */
 export function checkMap(name: string, object: any, field: string, key: any): void {
-    const map = object.get(field) as Map<any, any>;
+    const map = object[field] as Map<any, any>;
     if (map.has(key)) {
         throw new DuplicateError(`${name} '${field}' map already has key '${key}'`);
     }
@@ -118,3 +118,42 @@ export function checkURL(name: string, object: any, field: string, value: string
     }
 }
 
+// Private functions
+
+/**
+ * Return true if two Javascript objects are deeply equal.  We start from the
+ * assumption that they are in fact both objects and are both not null.
+ *
+ * Based on https://dmitripavlutin.com/how-to-compare-objects-in-javascript/
+ */
+function deepEqual(object1: object, object2: object): boolean {
+
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+    if (keys1.length !== keys2.length) {
+        return false;
+    }
+
+    for (const key of keys1) {
+        // @ts-ignore
+        const val1: any = object1[key];
+        // @ts-ignore
+        const val2: any = object2[key];
+        if (isObject(val1) && isObject(val2)) {
+            if (!deepEqual(val1, val2)) {
+                return false;
+            }
+        } else {
+            if (val1 !== val2) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+
+}
+
+function isObject(object: any): boolean {
+    return (object !== null) && (typeof object === "object");
+}
