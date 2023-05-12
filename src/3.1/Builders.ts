@@ -21,6 +21,7 @@ import {
     OpenApiObject,
     OperationObject,
     ParameterObject,
+    ParametersObject,
     PathItemObject,
     PathsObject,
     ReferenceObject,
@@ -167,9 +168,9 @@ export class ComponentsObjectBuilder {
     }
 
     // Convenience - add them individually
-    public parameters(parameters: Map<string, ParameterObject | ReferenceObject>): ComponentsObjectBuilder {
-        for (const [name, parameter] of parameters.entries()) {
-            this.parameter(name, parameter);
+    public parameters(parameters: ParametersObject): ComponentsObjectBuilder {
+        for (const name in parameters) {
+            this.parameter(name, parameters[name]);
         }
         return this;
     }
@@ -811,6 +812,14 @@ export class OperationObjectBuilder {
         return this;
     }
 
+    // Convenience - add them individually
+    public parameters(parameters: ParametersObject): OperationObjectBuilder {
+        for (const name in parameters) {
+            this.parameter(parameters[name]);
+        }
+        return this;
+    }
+
     public requestBody(requestBody: RequestBodyObject | ReferenceObject): OperationObjectBuilder {
         checkDuplicate("OperationObject", this.target, "requestBody");
         this.target.requestBody = requestBody;
@@ -941,6 +950,30 @@ export class ParameterObjectBuilder {
     public build(): HeaderObject {
         return this.target;
     }
+}
+
+/**
+ * Builder for `ParametersObject` objects.  Not officially an OpenAPI object type,
+ * but convenient for building up more complex objects.
+ */
+export class ParametersObjectBuilder {
+
+    constructor() {
+        this.target = {};
+    }
+
+    public parameter(parameter: ParameterObject): ParametersObjectBuilder {
+        checkDuplicate("ParametersObject", this.target, parameter.name);
+        this.target[parameter.name] = parameter;
+        return this;
+    }
+
+    private target: ParametersObject;
+
+    public build(): ParametersObject {
+        return this.target;
+    }
+
 }
 
 /**

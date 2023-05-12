@@ -624,6 +624,19 @@ export interface ParameterObject extends SpecificationExtension {
 }
 
 /**
+ * A set of parameters, keyed by `name`.  This is not an official object type
+ * in OpenAPI, but is a convenience for composing more complicated objects.
+ */
+export interface ParametersObject {
+
+    /**
+     * Map of included ParameterObjects, keyed by parameter name.
+     */
+    [name: string]: ParameterObject | ReferenceObject;
+
+}
+
+/**
  * The operations available on a single path.  A `PathItem` MAY be empty,
  * due to ACL constraints.  The path itself is still exposed to the
  * documentation viewer, but they will not know which operations and
