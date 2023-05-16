@@ -849,6 +849,12 @@ export class OperationObjectBuilder {
         return this;
     }
 
+    public summary(summary: string): OperationObjectBuilder {
+        checkDuplicate("OperationObject", this.target, "summary");
+        this.target.summary = summary;
+        return this;
+    }
+
     public tag(tag: TagObject): OperationObjectBuilder {
         if (!this.target.tags) {
             this.target.tags = [];
