@@ -941,7 +941,7 @@ export class ParameterObjectBuilder {
         return this;
     }
 
-    schema(schema: SchemaObject): ParameterObjectBuilder {
+    schema(schema: SchemaObject | ReferenceObject): ParameterObjectBuilder {
         checkDuplicate("ParameterObject", this.target, "schema");
         this.target.schema = schema;
         return this;

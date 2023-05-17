@@ -607,7 +607,7 @@ export interface ParameterObject extends SpecificationExtension {
     /**
      * The schema defining the type used for the parameter.
      */
-    schema?: SchemaObject;
+    schema?: SchemaObject | ReferenceObject;
 
     /**
      * Describes how the parameter value will be serialized depending on the
