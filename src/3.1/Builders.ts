@@ -968,9 +968,9 @@ export class ParametersObjectBuilder {
         this.target = {};
     }
 
-    public parameter(parameter: ParameterObject): ParametersObjectBuilder {
-        checkDuplicate("ParametersObject", this.target, parameter.name);
-        this.target[parameter.name] = parameter;
+    public parameter(name: string, parameter: ParameterObject | ReferenceObject): ParametersObjectBuilder {
+        checkDuplicate("ParametersObject", this.target, name);
+        this.target[name] = parameter;
         return this;
     }
 
@@ -1356,6 +1356,14 @@ export class SchemaObjectBuilder {
             checkArray("SchemaObject", this.target, "required", required);
         }
         this.target.required.push(required);
+        return this;
+    }
+
+    // Convenience -- add them individually
+    public requireds(requireds: string[]): SchemaObjectBuilder {
+        for (const required of requireds) {
+            this.required(required);
+        }
         return this;
     }
 

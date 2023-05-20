@@ -1,6 +1,6 @@
 {
   "name": "@craigmcc/openapi-builders",
-  "version": "3.0.0-alpha.12",
+  "version": "3.0.0-alpha.14",
   "description": "Builder Pattern generators to create OpenAPI Specification files.",
   "main": "dist/index.js",
   "private": false,
