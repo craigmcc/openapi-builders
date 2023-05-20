@@ -939,7 +939,11 @@ export interface SchemaObject extends SpecificationExtension {
      */
     discriminator?: SchemaDiscriminatorObject;
 
-    // TODO - items???
+    /**
+     * If `type` is "array", the schema (or schema reference) defining
+     * each array element.
+     */
+    items?: SchemaObject | ReferenceObject;
 
     /**
      * This object MUST match exactly one of the specified schemas.

@@ -1323,7 +1323,11 @@ export class SchemaObjectBuilder {
 
     // TODO: discriminator()
 
-    // TODO: items()
+    items(items: SchemaObject | ReferenceObject): SchemaObjectBuilder {
+        checkDuplicate("SchemaObject", this.target, "items");
+        this.target.items = items;
+        return this;
+    }
 
     oneOf(oneOf: SchemaObject | ReferenceObject): SchemaObjectBuilder {
         if (!this.target.oneOf) {
