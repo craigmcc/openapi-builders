@@ -193,6 +193,14 @@ export class ComponentsObjectBuilder {
         return this;
     }
 
+    // Convenience - add them individually
+    public paths(paths: PathsObject): ComponentsObjectBuilder {
+        for (const name in paths) {
+            this.pathItem(name, paths[name]);
+        }
+        return this;
+    }
+
     public requestBody(name: string, requestBody: RequestBodyObject | ReferenceObject): ComponentsObjectBuilder {
         if (this.target.requestBodies) {
             checkMap("ComponentsObject", this.target, "requestBodies", name);
@@ -1102,6 +1110,14 @@ export class PathsObjectBuilder {
             throw new ValueError(`Path '${path}' does not start with a slash`);
         }
         this.target[path] = pathItem;
+        return this;
+    }
+
+    // Convenience - add them individually
+    public paths(paths: PathsObject): PathsObjectBuilder {
+        for (const path in paths) {
+            this.pathItem(path, paths[path]);
+        }
         return this;
     }
 

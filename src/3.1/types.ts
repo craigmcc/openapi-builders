@@ -737,7 +737,7 @@ export interface PathsObject extends SpecificationExtension {
      *
      * See the OpenAPI specification for details on template matching.
      */
-    [path: string]: PathItemObject;
+    [path: string]: PathItemObject | ReferenceObject;
 
 }
 
