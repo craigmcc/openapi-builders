@@ -30,9 +30,9 @@
   },
   "homepage": "https://github.com/craigmcc/openapi-builders#readme",
   "devDependencies": {
-    "@types/chai": "^4.3.5",
+    "@types/chai": "^4.3.8",
     "@types/mocha": "^10.0.2",
-    "chai": "^4.3.8",
+    "chai": "^4.3.10",
     "mocha": "^10.1.0",
     "ts-node": "^10.2.0",
     "typedoc": "^0.25.2",
