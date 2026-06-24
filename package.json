@@ -33,7 +33,7 @@
     "@types/chai": "^4.3.11",
     "@types/mocha": "^10.0.6",
     "chai": "^4.3.10",
-    "mocha": "^10.4.0",
+    "mocha": "^10.8.2",
     "ts-node": "^10.9.2",
     "typedoc": "^0.26.3",
     "typedoc-theme-yaf": "^0.0.4",
