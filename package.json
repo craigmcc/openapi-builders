@@ -40,6 +40,6 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "yaml": "^2.4.5"
+    "yaml": "^2.9.0"
   }
 }
