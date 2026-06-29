@@ -37,7 +37,7 @@
     "ts-node": "^10.9.2",
     "typedoc": "^0.26.3",
     "typedoc-theme-yaf": "^0.0.4",
-    "typescript": "^5.5.3"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "yaml": "^2.9.0"
